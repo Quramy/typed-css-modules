@@ -2,29 +2,27 @@
 
 'use strict';
 
-var gaze = require('gaze');
-var glob = require('glob');
-var argv = require('optimist')
-  .usage('Create .css.d.ts files. \nUsage: $0')
+import process from 'process';
+import fs from 'fs';
+import path from 'path';
+import gaze from 'gaze';
+import glob from 'glob';
+import optimist from 'optimist';
+
+import {DtsCreator} from './dtsCreator';
+
+var argv = optimist.usage('Create .css.d.ts files. \nUsage: $0')
   .alias('d', 'directory').describe('d', 'Input directory includes .css files')
   .alias('w', 'watch').describe('w', 'Watch input directory')
-  .argv
-  ;
-
-var process = require('process');
-var fs = require('fs');
-var path = require('path');
+  .argv;
 
 var rootDir = process.cwd();
+var createor = new DtsCreator({rootDir});
 var filesPattern = path.join(argv.d, '**/*.css');
 
-var core = require('./index');
-core.initLoader(rootDir);
-
 var writeFile = f => {
-  core.createContents(f).then(result => {
+  createor.create(f).then(result => {
     var outPath = path.join(rootDir, f + '.d.ts');
-    //console.log(outPath, result);
     fs.writeFile(outPath, result, 'utf8', (err) => {
       if(err) {
         console.error(err);
@@ -32,7 +30,7 @@ var writeFile = f => {
       }
       console.log('Wrote ' + outPath);
     });
-  });
+  }).catch(err => console.error(err));
 };
 
 if(!argv.w) {
@@ -49,7 +47,6 @@ if(!argv.w) {
   gaze(filesPattern, function(err, files) {
     this.on('changed', (absPath) => {
       var f = path.relative(rootDir, absPath);
-      core.initLoader(rootDir);
       writeFile(f);
     });
     this.on('added', (absPath) => {
@@ -58,3 +55,4 @@ if(!argv.w) {
     });
   });
 }
+
