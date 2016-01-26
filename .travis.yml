@@ -6,7 +6,7 @@ env:
   - GIT_AUTHOR_EMAIL=yosuke.kurami@gmail.com
 language: node_js
 node_js:
-- 4.2.3 
+- 4.2.3
 before_install:
 - npm install -g gulp
 - npm install
@@ -16,7 +16,7 @@ deploy:
   provider: npm
   email: yosuke.kurami@gmail.com
   api_key:
-    secure: Tuu/73TVqQhcmDV+BgXa5XBEGdmb82xVNM40QDQtSsu7wdIqGgwW9IDOKD+tdxm4KqpDZICeYI6NrnqfpJw3vnDA/j20ThvrJYb63lQcfrWD32/AY7rD5p+eNhEYoVRZWUV48vPZ9ruSJwzhuv9OaSg6taHyKgUWALjs+ZnVX7sCF+Dw9AbNQqEJ2ZaOeM6+dmFhnQ/8oUzG5UBAj47onoYrEOKvQqAleiOKwiMvAUGK1mAZBoO8y/+PnIgYJ9dpZyxMQMOOVn76EUOrh2P3FcjBoEVkpY9PQpCwjCxw5Bv4LCCLyWO9IYZTbl4vlCujbPbzLkrBeLA26WJJsqyGU0e0KZrjvt0E9PN2jL/4qY/m2UJgHxyg1aMM84dEFPs89TD96KP9xnLm9qsSYU5j/0DXsmpy/Z/Tl4FlRotN26+xGJcxxcZz3p9DXcGmLEDT9FNF7+Cweb3De03oHAEoFiKi7qrSn5REzgXssB4UZo9w/QXWvDF68G3Ryzqh16t8wLpOpruHWFQy9qW9EJrWNHH+3qO3v9NvshRXmBf/KNFc0fr7e7zuIizPflNnQGmd5hDq4dSB8D24RgGMlbgIC311qKgvorYHHngXGm4Ob3L0QAG3tEZTP3SP0fvRUh9MBsKHL/GJG8kt9ZKJ49u6/5KzqLSvMEAoHbEanePtonc=
+    secure: hSYXqWPQ2P3aFrXnLl87Whi2atYVi4QL7VWCrQ2ZwY6Hn2kJJQyKQozMT0Xysw5ujriGLpe7l9uKgiZtVQa1iD3prpl+207pUT3q4bD2AKI6C6GQeA4+5cGIpt1syiJ91ipHnR7y8ANy2X4rle2j/o+jGKHXKWc5gJgvylPmoQC/5YkSKz+TcWQab++6dxZ5qvbpoinRU0gb8J0weuxscPCofYgG4d8VTTeio2hbHqw9WdfmMLv02AHHRDsAW4K1nneHdIgDVP4hv4K27wWcFyrFLEc2ci82BV0WNnyXwxuJ5Sj5x7HsFgrGSMfp5/HCIR3ptE92H5G7rlOWErTw/tLKvB4fxQiJ+YdP510yiivpXTbMI6tibvOHslP6zes46E9aC1ojooPa6RgKkosFRkjQgvNAqfY8DgvTK+npUDnwTeLZbdjuqicM5MZk3jnex+8cle+gWMkrOtnjij5U9Ghq0weJU9Izrs+NmZTm+rvZb84PrgeMkb8hyH5U3LJDpioIEgJx0lgi/Ia59Ls2QvX2+yFR0JsCxERHb0ZqA9CkAe1fpT6qxxYsuKmDtm2sR4cQGkWfK7/4ZcKKAaNuEB1esAja4uwyRRice1U7TiXUw/8GyBfHWZwofPjx3pq6AXl2eZ9/26ssvzwV75MtK0QDLc5MvRvMTbqSmWQAS8Q=
   on:
     tags: true
     repo: Quramy/typed-css-modules
