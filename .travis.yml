@@ -1,0 +1,22 @@
+env:
+  global:
+    - GIT_COMMITTER_NAME=y-kurami
+    - GIT_COMMITTER_EMAIL=yosuke.kurami@gmail.com
+    - GIT_AUTHOR_NAME=Quramy
+    - GIT_AUTHOR_EMAIL=yosuke.kurami@gmail.com
+  language: node_js
+  node_js:
+    - 4.2.3 
+  before_install:
+    - npm install -g gulp
+    - npm install
+  script:
+    - gulp test
+  deploy:
+    provider: npm
+    email: yosuke.kurami@gmail.com
+    api_key:
+      secure: Tuu/73TVqQhcmDV+BgXa5XBEGdmb82xVNM40QDQtSsu7wdIqGgwW9IDOKD+tdxm4KqpDZICeYI6NrnqfpJw3vnDA/j20ThvrJYb63lQcfrWD32/AY7rD5p+eNhEYoVRZWUV48vPZ9ruSJwzhuv9OaSg6taHyKgUWALjs+ZnVX7sCF+Dw9AbNQqEJ2ZaOeM6+dmFhnQ/8oUzG5UBAj47onoYrEOKvQqAleiOKwiMvAUGK1mAZBoO8y/+PnIgYJ9dpZyxMQMOOVn76EUOrh2P3FcjBoEVkpY9PQpCwjCxw5Bv4LCCLyWO9IYZTbl4vlCujbPbzLkrBeLA26WJJsqyGU0e0KZrjvt0E9PN2jL/4qY/m2UJgHxyg1aMM84dEFPs89TD96KP9xnLm9qsSYU5j/0DXsmpy/Z/Tl4FlRotN26+xGJcxxcZz3p9DXcGmLEDT9FNF7+Cweb3De03oHAEoFiKi7qrSn5REzgXssB4UZo9w/QXWvDF68G3Ryzqh16t8wLpOpruHWFQy9qW9EJrWNHH+3qO3v9NvshRXmBf/KNFc0fr7e7zuIizPflNnQGmd5hDq4dSB8D24RgGMlbgIC311qKgvorYHHngXGm4Ob3L0QAG3tEZTP3SP0fvRUh9MBsKHL/GJG8kt9ZKJ49u6/5KzqLSvMEAoHbEanePtonc=
+      on:
+        tags: true
+        repo: Quramy/typed-css-modules
