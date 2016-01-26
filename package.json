@@ -1,6 +1,6 @@
 {
   "name": "typed-css-modules",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Creates .d.ts files from css-modules' .css files",
   "main": "index.js",
   "scripts": {
