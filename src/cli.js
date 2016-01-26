@@ -4,6 +4,8 @@
 
 import process from 'process';
 import fs from 'fs';
+import isThere from 'is-there';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import gaze from 'gaze';
 import glob from 'glob';
@@ -13,9 +15,11 @@ import {DtsCreator} from './dtsCreator';
 
 let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
   .example('$0 src/styles')
+  .example('$0 src -o dist')
   .example('$0 -p styles/**/*.icss -w')
   .detectLocale(false)
   .demand(['_'])
+  .alias('o', 'outDir').describe('o', 'Output directory')
   .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('h', 'help').help('h')
@@ -25,7 +29,13 @@ let rootDir, searchDir;
 let creator;
 let writeFile = f => {
   creator.create(f).then(result => {
-    var outPath = path.join(rootDir, f + '.d.ts');
+    var od = argv.o ? path.join(rootDir, argv.o) : rootDir;
+    var relativePath = path.relative(searchDir, f);
+    var outPath = path.join(od, relativePath + '.d.ts');
+    var outPathDir = path.join(od, path.dirname(relativePath));
+    if(!isThere(outPathDir)) {
+      mkdirp.sync(outPathDir);
+    }
     fs.writeFile(outPath, result, 'utf8', (err) => {
       if(err) {
         console.error(err);

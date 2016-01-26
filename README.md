@@ -46,6 +46,23 @@ Then, this creates `*.css.d.ts` file under the directory which has original .css
     | myStyle.css.d.ts [created]
 ```
 
+#### output directory
+Use `-o` or `--outDir` option.
+
+For example:
+
+```sh
+tcm src -o dist src
+```
+
+```text
+(your project root)
+- src/
+    | myStyle.css
+- dist/
+    | myStyle.css.d.ts [created]
+```
+
 #### file name pattern
 
 By the default, this tool searches `**/*.css` files under `<input directory>`.
