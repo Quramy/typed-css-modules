@@ -7,21 +7,24 @@ import fs from 'fs';
 import path from 'path';
 import gaze from 'gaze';
 import glob from 'glob';
-import optimist from 'optimist';
+import yargs from 'yargs';
 
 import {DtsCreator} from './dtsCreator';
 
-var argv = optimist.usage('Create .css.d.ts files. \nUsage: $0')
-  .alias('d', 'directory').describe('d', 'Input directory includes .css files')
-  .alias('w', 'watch').describe('w', 'Watch input directory')
-  .argv;
+let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
+  .example('$0 src/styles')
+  .example('$0 -p styles/**/*.icss -w')
+  .detectLocale(false)
+  .demand(['_'])
+  .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
+  .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
+  .alias('h', 'help').help('h')
+let argv = yarg.argv;
 
-var rootDir = process.cwd();
-var createor = new DtsCreator({rootDir});
-var filesPattern = path.join(argv.d, '**/*.css');
-
-var writeFile = f => {
-  createor.create(f).then(result => {
+let rootDir, searchDir;
+let creator;
+let writeFile = f => {
+  creator.create(f).then(result => {
     var outPath = path.join(rootDir, f + '.d.ts');
     fs.writeFile(outPath, result, 'utf8', (err) => {
       if(err) {
@@ -33,26 +36,48 @@ var writeFile = f => {
   }).catch(err => console.error(err));
 };
 
-if(!argv.w) {
-  glob(filesPattern, null, (err, files) => {
-    if(err) {
-      console.error(err);
-      return;
-    }
-    if(!files || !files.length) return;
-    files.forEach(f => writeFile(f));
-  });
-}else{
-  console.log('Watch ' + filesPattern + '...');
-  gaze(filesPattern, function(err, files) {
-    this.on('changed', (absPath) => {
-      var f = path.relative(rootDir, absPath);
-      writeFile(f);
+let main = () => {
+  if(argv.h) {
+    yarg.showHelp();
+    return;
+  }
+
+  if(argv._ && argv._[0]) {
+    searchDir = argv._[0];
+  }else if(argv.p) {
+    searchDir = './';
+  }else{
+    yarg.showHelp();
+    return;
+  }
+
+  let filesPattern = path.join(searchDir, argv.p || '**/*.css');
+  rootDir = process.cwd();
+  creator = new DtsCreator({rootDir});
+
+  if(!argv.w) {
+    glob(filesPattern, null, (err, files) => {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      if(!files || !files.length) return;
+      files.forEach(f => writeFile(f));
     });
-    this.on('added', (absPath) => {
-      var f = path.relative(rootDir, absPath);
-      writeFile(f);
+  }else{
+    console.log('Watch ' + filesPattern + '...');
+    gaze(filesPattern, function(err, files) {
+      this.on('changed', (absPath) => {
+        let f = path.relative(rootDir, absPath);
+        writeFile(f);
+      });
+      this.on('added', (absPath) => {
+        let f = path.relative(rootDir, absPath);
+        writeFile(f);
+      });
     });
-  });
-}
+  }
+};
+
+main();
 
