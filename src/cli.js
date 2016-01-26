@@ -29,7 +29,7 @@ let rootDir, searchDir;
 let creator;
 let writeFile = f => {
   creator.create(f).then(result => {
-    var od = argv.o ? path.join(rootDir, argv.o) : rootDir;
+    var od = argv.o ? path.join(rootDir, argv.o) : path.join(rootDir, searchDir);
     var relativePath = path.relative(searchDir, f);
     var outPath = path.join(od, relativePath + '.d.ts');
     var outPathDir = path.join(od, path.dirname(relativePath));
