@@ -5,6 +5,7 @@ Creates TypeScript definition files from [CSS Modules](https://github.com/css-mo
 If you have the following css, 
 
 ```css
+/* styles.css */
 .myClass {
   color: red;
 }
@@ -13,6 +14,7 @@ If you have the following css,
 this creates the following .d.ts files from it:
 
 ```ts
+/* styles.css.d.ts */
 export const myClass: string;
 ```
 
