@@ -1,6 +1,6 @@
-# typed-css-modules
+# typed-css-modules [![Build Status](https://travis-ci.org/Quramy/typed-css-modules.svg?branch=master)](https://travis-ci.org/Quramy/typed-css-modules) [![npm version](https://badge.fury.io/js/typed-css-modules.svg)](http://badge.fury.io/js/typed-css-modules)
 
-Creates TypeScript definiton files from css-modules .css files.
+Creates TypeScript definition files from css-modules .css files.
 
 If you have the following css, 
 
@@ -32,7 +32,7 @@ npm install -g typed-css-modules
 ```
 
 ```sh
-tcm -d src
+tcm <input directory>
 ```
 
 Then, this creates `*.css.d.ts` file under the directory which has original .css file.
@@ -42,6 +42,15 @@ Then, this creates `*.css.d.ts` file under the directory which has original .css
 - src/
     | myStyle.css
     | myStyle.css.d.ts [created]
+```
+
+#### file name pattern
+
+By the default, this tool searches `**/*.css` files under `<input directory>`.
+If you can customize glob pattern, you can use `--pattern` or `-p` option.
+
+```sh
+tcm -p src/**/*.icss
 ```
 
 #### watch
