@@ -11,14 +11,14 @@ If you have the following css,
 }
 ```
 
-this creates the following .d.ts files from it:
+this creates the following .d.ts files from the above css:
 
 ```ts
 /* styles.css.d.ts */
 export const myClass: string;
 ```
 
-So, you can use CSS modules in your .ts sources:
+So, you can import CSS modules in your .ts sources:
 
 ```ts
 import * as styles from './styles.css';
