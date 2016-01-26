@@ -1,0 +1,23 @@
+{
+  "name": "typed-css-modules",
+  "version": "0.0.1",
+  "description": "Creates .d.ts files from css-modules' .css files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "tcm": "cli.js"
+  },
+  "keywords": [
+    "css-modules"
+  ],
+  "author": "quramy",
+  "license": "MIT",
+  "dependencies": {
+    "css-modulesify": "^0.16.1",
+    "gaze": "^0.5.2",
+    "glob": "^6.0.4",
+    "optimist": "^0.6.1"
+  }
+}

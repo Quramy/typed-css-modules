@@ -1,0 +1,10 @@
+.root {
+  color: red;
+}
+.text {
+  color: red;
+}
+
+#some_id.main > div.my-class1.myclass-2 {
+  width: 100px;
+}
