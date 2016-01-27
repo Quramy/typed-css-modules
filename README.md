@@ -117,7 +117,9 @@ An array of TypeScript definition expressions.
 e.g. `['export const myClass: string;'].
 
 #### `formatted`
-A string of TypeScript definition expression. Such as:
+A string of TypeScript definition expression.
+
+e.g.
 
 ```ts
 export const myClass: string;
