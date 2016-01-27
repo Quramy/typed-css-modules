@@ -11,7 +11,7 @@ If you have the following css,
 }
 ```
 
-this creates the following .d.ts files from the above css:
+typed-css-modules creates the following .d.ts files from it:
 
 ```ts
 /* styles.css.d.ts */
@@ -25,9 +25,7 @@ import * as styles from './styles.css';
 console.log(`<div class="${styles.myClass}"></div>`);
 ```
 
-## usage
-
-### CLI
+## CLI
 
 ```sh
 npm install -g typed-css-modules
@@ -37,7 +35,7 @@ npm install -g typed-css-modules
 tcm <input directory>
 ```
 
-Then, this creates `*.css.d.ts` file under the directory which has original .css file.
+Then, this creates `*.css.d.ts` files under the directory which has original .css file.
 
 ```text
 (your project root)
@@ -52,7 +50,7 @@ Use `-o` or `--outDir` option.
 For example:
 
 ```sh
-tcm src -o dist src
+tcm -o dist src
 ```
 
 ```text
@@ -75,8 +73,82 @@ tcm -p src/**/*.icss
 #### watch
 With `-w` or `--watch`, this CLI watches files in the input directory.
 
-### API
-T.B.D.
+## API
+
+```js
+import DtsCreator from 'typed-css-modules';
+let creator = new DtsCreator();
+creator.create('src/style.css').then(content => {
+  console.log(content.tokens);          // ['myClass']
+  console.log(content.formatted);       // 'export const myClass: string;'
+  content.writeFile();                  // writes this content to "src/style.css.d.ts"
+});
+```
+
+### class DtsCreator
+DtsCreator instance processes the input CSS and create TypeScript definition contents.
+
+#### `constructor(option)`
+You can set the following options:
+
+* `option.rootDir`: Project root directory(default: `process.cwd()`). 
+* `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
+* `option.ourDir`: Output directory(default: `option.searchDir`).
+
+#### `create(filepath) => Promise(dtsContent)`
+returns `DtsContent` instance.
+
+* `filepath`: path of #arget .css file.
+
+### class DtsContent
+DtsContent instance has `*.d.ts` content, final output path, and function to write file.
+
+#### `writeFile() => Promise(dtsContent)`
+Writes the DtsContent instance's content to a file.
+
+* `dtsContent`: the DtsContent instance itself.
+
+#### `tokens`
+An array of tokens retrieved from input CSS file.
+e.g. ['myClass']
+
+#### `contents`
+An array of TypeScript definition expressions.
+e.g. `['export const myClass: string;'].
+
+#### `formatted`
+A string of TypeScript definition expression. Such as:
+
+```ts
+export const myClass: string;
+```
+
+#### `messageList`
+An array of messages. The messages contains invalid token information.
+e.g. `['my-class is not valid TypeScript variable name.']`.
+
+#### `outputFilePath`
+Final output file path.
+
+## Remarks
+If your input CSS file has the followng class names, these invalid tokens are not written to output `.d.ts` file.
+
+```css
+/* TypeScript reserved word */
+.while {
+  color: red;
+}
+
+/* invalid TypeScript variable */
+.my-class{
+  color: red;
+}
+
+/* it's ok */
+.myClass {
+  color: red;
+}
+```
 
 ## License
 This software is released under the MIT License, see LICENSE.txt.
