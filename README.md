@@ -100,9 +100,9 @@ You can set the following options:
 * `option.ourDir`: Output directory(default: `option.searchDir`).
 
 #### `create(filepath) => Promise(dtsContent)`
-returns `DtsContent` instance.
+Returns `DtsContent` instance.
 
-* `filepath`: path of #arget .css file.
+* `filepath`: path of target .css file.
 
 ### class DtsContent
 DtsContent instance has `*.d.ts` content, final output path, and function to write file.
