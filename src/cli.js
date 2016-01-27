@@ -2,15 +2,10 @@
 
 'use strict';
 
-import process from 'process';
-import fs from 'fs';
-import isThere from 'is-there';
-import mkdirp from 'mkdirp';
 import path from 'path';
 import gaze from 'gaze';
 import glob from 'glob';
 import yargs from 'yargs';
-
 import {DtsCreator} from './dtsCreator';
 
 let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
@@ -24,29 +19,19 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('h', 'help').help('h')
 let argv = yarg.argv;
-
-let rootDir, searchDir;
 let creator;
+
 let writeFile = f => {
-  creator.create(f).then(result => {
-    var od = argv.o ? path.join(rootDir, argv.o) : path.join(rootDir, searchDir);
-    var relativePath = path.relative(searchDir, f);
-    var outPath = path.join(od, relativePath + '.d.ts');
-    var outPathDir = path.join(od, path.dirname(relativePath));
-    if(!isThere(outPathDir)) {
-      mkdirp.sync(outPathDir);
-    }
-    fs.writeFile(outPath, result, 'utf8', (err) => {
-      if(err) {
-        console.error(err);
-        return;
-      }
-      console.log('Wrote ' + outPath);
-    });
-  }).catch(err => console.error(err));
+  creator.create(f)
+  .then(content => content.writeFile())
+  .then(content => {
+    console.log('Wrote ' + content.outputFilePath);
+  })
+  .catch(reason => console.error(reason));
 };
 
 let main = () => {
+  let rootDir, searchDir;
   if(argv.h) {
     yarg.showHelp();
     return;
@@ -60,10 +45,9 @@ let main = () => {
     yarg.showHelp();
     return;
   }
-
   let filesPattern = path.join(searchDir, argv.p || '**/*.css');
   rootDir = process.cwd();
-  creator = new DtsCreator({rootDir});
+  creator = new DtsCreator({rootDir, searchDir, outDir: argv.o});
 
   if(!argv.w) {
     glob(filesPattern, null, (err, files) => {
@@ -72,19 +56,13 @@ let main = () => {
         return;
       }
       if(!files || !files.length) return;
-      files.forEach(f => writeFile(f));
+      files.forEach(writeFile);
     });
   }else{
     console.log('Watch ' + filesPattern + '...');
     gaze(filesPattern, function(err, files) {
-      this.on('changed', (absPath) => {
-        let f = path.relative(rootDir, absPath);
-        writeFile(f);
-      });
-      this.on('added', (absPath) => {
-        let f = path.relative(rootDir, absPath);
-        writeFile(f);
-      });
+      this.on('changed', writeFile);
+      this.on('added', writeFile);
     });
   }
 };

@@ -3,6 +3,10 @@
 import process from 'process';
 import fs from 'fs';
 import path from'path';
+
+import isThere from 'is-there';
+import mkdirp from 'mkdirp';
+
 import Core from 'css-modules-loader-core';
 
 var rootDir = process.cwd();
@@ -12,44 +16,104 @@ var validateKey = (key) => {
    return /^[$_a-zA-Z][0-9a-zA-Z$_]*$/.test(key);
 };
 
-var createDef = (root, rel, cb) => {
-  if(!cb) cb = () => {};
-  var sourcePath = path.join(root, rel)
-  fs.readFile(sourcePath, 'utf8', (err, contents) => {
-    if(err) {
-      cb(err, null);
+export class DtsContent {
+  constructor({
+    rootDir,
+    searchDir,
+    outDir,
+    rInputPath,
+    rawTokenList,
+    resultList,
+    messageList
+  }) {
+    this.rootDir = rootDir;
+    this.searchDir = searchDir;
+    this.outDir = outDir;
+    this.rInputPath = rInputPath;
+    this.rawTokenList = rawTokenList;
+    this.resultList = resultList;
+    this.messageList = messageList;
+  }
+
+  get contents() {
+    return this.resultList;
+  }
+
+  get formatted() {
+    if(!this.resultList || !this.resultList.length) return null;
+    return this.resultList.join('\n');
+  }
+
+  get tokens() {
+    return this.rawTokenList;
+  }
+
+  get outputFilePath() {
+    return path.join(this.rootDir, this.outDir, this.rInputPath + '.d.ts');
+  }
+
+  get inputFilePath() {
+    return path.join(this.rootDir, this.searchDir, this.rInputPath);
+  }
+
+  writeFile() {
+    var outPathDir = path.dirname(this.outputFilePath);
+    if(!isThere(outPathDir)) {
+      mkdirp.sync(outPathDir);
     }
-    core.load(contents, sourcePath, null).then((res) => {
-      if(res && res.exportTokens) {
-        var tokens = res.exportTokens;
-        var keys = Object.keys(tokens);
-        var result = keys.filter(validateKey).map(k => ('export const ' + k + ': string;'));
-        cb(null, result.join('\n'));
-      }
+    return new Promise((resolve, reject) => {
+      fs.writeFile(this.outputFilePath, this.formatted, 'utf8', (err) => {
+        if(err) {
+          reject(err);
+        }else{
+          resolve(this);
+        }
+      });
     });
-  });
-};
+  }
+}
 
 export class DtsCreator {
   constructor(options) {
     if(!options) options = {};
     this.rootDir = options.rootDir || process.cwd();
+    this.searchDir = options.searchDir || '';
+    this.outDir = options.outDir || this.searchDir;
     this.core = new Core();
+    this.inputDirectory = path.join(this.rootDir, this.searchDir);
+    this.outputDirectory = path.join(this.rootDir, this.outDir);
   }
 
-  create(relativePath) {
+  create(filePath) {
     return new Promise((resolve, reject) => {
-      var sourcePath = path.join(this.rootDir, relativePath)
-      fs.readFile(sourcePath, 'utf8', (err, contents) => {
+      fs.readFile(filePath, 'utf8', (err, contents) => {
         if(err) {
           reject(err);
         }
-        this.core.load(contents, sourcePath, null).then((res) => {
+        this.core.load(contents, filePath, null).then((res) => {
           if(res && res.exportTokens) {
             var tokens = res.exportTokens;
             var keys = Object.keys(tokens);
             var result = keys.filter(validateKey).map(k => ('export const ' + k + ': string;'));
-            resolve(result.join('\n'));
+
+            var rInputPath;
+            if(path.isAbsolute) {
+              rInputPath = path.relative(this.inputDirectory, filePath);
+            }else{
+              rInputpath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
+            }
+
+            var content = new DtsContent({
+              rootDir: this.rootDir,
+              searchDir: this.searchDir,
+              outDir: this.outDir,
+              rInputPath,
+              rawTokenList: tokens,
+              resultList: result,
+              messageList: []
+            });
+
+            resolve(content);
           }else{
             reject(res);
           }
