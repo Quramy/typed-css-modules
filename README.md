@@ -75,6 +75,10 @@ With `-w` or `--watch`, this CLI watches files in the input directory.
 
 ## API
 
+```sh
+npm install typed-css-modules
+```
+
 ```js
 import DtsCreator from 'typed-css-modules';
 let creator = new DtsCreator();
@@ -88,7 +92,7 @@ creator.create('src/style.css').then(content => {
 ### class DtsCreator
 DtsCreator instance processes the input CSS and create TypeScript definition contents.
 
-#### `constructor(option)`
+#### `new DtsCreator(option)`
 You can set the following options:
 
 * `option.rootDir`: Project root directory(default: `process.cwd()`). 
