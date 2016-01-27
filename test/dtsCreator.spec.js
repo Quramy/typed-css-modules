@@ -29,6 +29,34 @@ describe('DtsCreator', () => {
 });
 
 describe('DtsContent', () => {
+
+  describe('#tokens', () => {
+    it('returns original tokens', done => {
+      new DtsCreator().create('test/testStyle.css').then(content => {
+        assert.equal(content.tokens[0], "myClass");
+        done();
+      });
+    });
+  });
+
+  describe('#inputFilePath', () => {
+    it('returns original CSS file name', done => {
+      new DtsCreator().create('test/testStyle.css').then(content => {
+        assert.equal(path.relative(process.cwd(), content.inputFilePath), "test/testStyle.css");
+        done();
+      });
+    });
+  });
+
+  describe('#formatted', () => {
+    it('returns formatted .d.ts string', done => {
+      new DtsCreator().create('test/testStyle.css').then(content => {
+        assert.equal(content.formatted, "export const myClass: string;");
+        done();
+      });
+    });
+  });
+
   describe('#writeFile', () => {
     it('writes a file', done => {
       new DtsCreator().create('test/testStyle.css').then(content => {

@@ -26,6 +26,9 @@ let writeFile = f => {
   .then(content => content.writeFile())
   .then(content => {
     console.log('Wrote ' + content.outputFilePath);
+    content.messageList.forEach(message => {
+      console.warn('[Warn] ' + message);
+    });
   })
   .catch(reason => console.error(reason));
 };

@@ -8,7 +8,9 @@ import isThere from 'is-there';
 import mkdirp from 'mkdirp';
 
 import Core from 'css-modules-loader-core';
+import {TokenValidator} from './tokenValidator';
 
+let validator = new TokenValidator();
 var rootDir = process.cwd();
 
 // TODO
@@ -94,7 +96,19 @@ export class DtsCreator {
           if(res && res.exportTokens) {
             var tokens = res.exportTokens;
             var keys = Object.keys(tokens);
-            var result = keys.filter(validateKey).map(k => ('export const ' + k + ': string;'));
+            var validKeys = [], invalidKeys = [];
+            var messageList = [];
+
+            keys.forEach(key => {
+              var ret = validator.validate(key);
+              if(ret.isValid) {
+                validKeys.push(key);
+              }else{
+                messageList.push(ret.message);
+              }
+            });
+
+            var result = validKeys.map(k => ('export const ' + k + ': string;'));
 
             var rInputPath;
             if(path.isAbsolute) {
@@ -108,9 +122,9 @@ export class DtsCreator {
               searchDir: this.searchDir,
               outDir: this.outDir,
               rInputPath,
-              rawTokenList: tokens,
+              rawTokenList: keys,
               resultList: result,
-              messageList: []
+              messageList
             });
 
             resolve(content);
