@@ -101,7 +101,7 @@ You can set the following options:
 
 * `option.rootDir`: Project root directory(default: `process.cwd()`). 
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
-* `option.ourDir`: Output directory(default: `option.searchDir`).
+* `option.outDir`: Output directory(default: `option.searchDir`).
 
 #### `create(filepath) => Promise(dtsContent)`
 Returns `DtsContent` instance.
