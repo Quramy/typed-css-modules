@@ -160,5 +160,8 @@ If your input CSS file has the followng class names, these invalid tokens are no
 }
 ```
 
+## Example
+Please see [https://github.com/Quramy/typescript-css-modules-demo](https://github.com/Quramy/typescript-css-modules-demo).
+
 ## License
 This software is released under the MIT License, see LICENSE.txt.
