@@ -32,8 +32,11 @@ console.log(`<div class="${styles.myClass}"></div>`);
 npm install -g typed-css-modules
 ```
 
+And exec `tcm <input directory>` command. 
+For example, if you have .css files under `src` directory, exec the following:
+
 ```sh
-tcm <input directory>
+tcm src
 ```
 
 Then, this creates `*.css.d.ts` files under the directory which has original .css file.
