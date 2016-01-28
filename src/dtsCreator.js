@@ -12,7 +12,7 @@ import FileSystemLoader from './fileSystemLoader';
 
 let validator = new TokenValidator();
 
-export class DtsContent {
+class DtsContent {
   constructor({
     rootDir,
     searchDir,

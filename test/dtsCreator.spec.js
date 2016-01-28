@@ -8,13 +8,20 @@ describe('DtsCreator', () => {
   var creator = new DtsCreator();
 
   describe('#create', () => {
-    it('returns DtsContent instance', done => {
+    it('returns DtsContent instance simple css', done => {
       creator.create('test/testStyle.css').then(content => {
         assert.equal(content.contents.length, 1);
         assert.equal(content.contents[0], "export const myClass: string;")
         done();
       });
     });
+    it('returns DtsContent instatnce from composing css', done => {
+      creator.create('test/composer.css').then(content => {
+        assert.equal(content.contents.length, 1);
+        assert.equal(content.contents[0], "export const root: string;")
+        done();
+      });
+    })
   });
 
   describe('#modify path', () => {
