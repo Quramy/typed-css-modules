@@ -18,9 +18,10 @@ typed-css-modules creates the following .d.ts files from it:
 export const myClass: string;
 ```
 
-So, you can import CSS modules in your .ts sources:
+So, you can import CSS modules in your TypeScript sources:
 
 ```ts
+/* app.ts */
 import * as styles from './styles.css';
 console.log(`<div class="${styles.myClass}"></div>`);
 ```
@@ -114,11 +115,11 @@ Writes the DtsContent instance's content to a file.
 
 #### `tokens`
 An array of tokens retrieved from input CSS file.
-e.g. ['myClass']
+e.g. `['myClass']`
 
 #### `contents`
 An array of TypeScript definition expressions.
-e.g. `['export const myClass: string;'].
+e.g. `['export const myClass: string;']`.
 
 #### `formatted`
 A string of TypeScript definition expression.
