@@ -7,16 +7,10 @@ import path from'path';
 import isThere from 'is-there';
 import mkdirp from 'mkdirp';
 
-import Core from 'css-modules-loader-core';
 import {TokenValidator} from './tokenValidator';
+import FileSystemLoader from './fileSystemLoader';
 
 let validator = new TokenValidator();
-var rootDir = process.cwd();
-
-// TODO
-var validateKey = (key) => {
-   return /^[$_a-zA-Z][0-9a-zA-Z$_]*$/.test(key);
-};
 
 export class DtsContent {
   constructor({
@@ -81,60 +75,55 @@ export class DtsCreator {
     this.rootDir = options.rootDir || process.cwd();
     this.searchDir = options.searchDir || '';
     this.outDir = options.outDir || this.searchDir;
-    this.core = new Core();
+    this.loader = new FileSystemLoader(this.rootDir);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
   }
 
-  create(filePath) {
+  create(filePath, clearCache = false) {
     return new Promise((resolve, reject) => {
-      fs.readFile(filePath, 'utf8', (err, contents) => {
-        if(err) {
-          reject(err);
-        }
-        this.core.load(contents, filePath, null).then((res) => {
-          if(res && res.exportTokens) {
-            var tokens = res.exportTokens;
-            var keys = Object.keys(tokens);
-            var validKeys = [], invalidKeys = [];
-            var messageList = [];
+      var rInputPath;
+      if(path.isAbsolute(filePath)) {
+        rInputPath = path.relative(this.inputDirectory, filePath);
+      }else{
+        rInputPath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
+      }
+      if(clearCache) {
+        this.loader.tokensByFile = {};
+      }
+      this.loader.fetch(filePath, "/").then(res => {
+        if(res) {
+          var tokens = res;
+          var keys = Object.keys(tokens);
+          var validKeys = [], invalidKeys = [];
+          var messageList = [];
 
-            keys.forEach(key => {
-              var ret = validator.validate(key);
-              if(ret.isValid) {
-                validKeys.push(key);
-              }else{
-                messageList.push(ret.message);
-              }
-            });
-
-            var result = validKeys.map(k => ('export const ' + k + ': string;'));
-
-            var rInputPath;
-            if(path.isAbsolute) {
-              rInputPath = path.relative(this.inputDirectory, filePath);
+          keys.forEach(key => {
+            var ret = validator.validate(key);
+            if(ret.isValid) {
+              validKeys.push(key);
             }else{
-              rInputpath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
+              messageList.push(ret.message);
             }
+          });
 
-            var content = new DtsContent({
-              rootDir: this.rootDir,
-              searchDir: this.searchDir,
-              outDir: this.outDir,
-              rInputPath,
-              rawTokenList: keys,
-              resultList: result,
-              messageList
-            });
+          var result = validKeys.map(k => ('export const ' + k + ': string;'));
 
-            resolve(content);
-          }else{
-            reject(res);
-          }
-        });
+          var content = new DtsContent({
+            rootDir: this.rootDir,
+            searchDir: this.searchDir,
+            outDir: this.outDir,
+            rInputPath,
+            rawTokenList: keys,
+            resultList: result,
+            messageList
+          });
+
+          resolve(content);
+        }else{
+          reject(res);
+        }
       });
     });
   }
-
 }
-

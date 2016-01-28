@@ -24,7 +24,7 @@ let argv = yarg.argv;
 let creator;
 
 let writeFile = f => {
-  creator.create(f)
+  creator.create(f, !!argv.w)
   .then(content => content.writeFile())
   .then(content => {
     console.log('Wrote ' + chalk.green(content.outputFilePath));
