@@ -1,7 +1,7 @@
 {
   "name": "typed-css-modules",
   "version": "0.1.5",
-  "description": "Creates .d.ts files from css-modules' .css files",
+  "description": "Creates .d.ts files from CSS Modules .css files",
   "main": "index.js",
   "scripts": {
     "build": "gulp compile",
@@ -10,8 +10,12 @@
   "bin": {
     "tcm": "lib/cli.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Quramy/typed-css-modules.git"
+  },
   "keywords": [
-    "css-modules"
+    "css-modules", "typescript"
   ],
   "author": "quramy",
   "license": "MIT",
