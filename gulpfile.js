@@ -19,7 +19,6 @@ gulp.task('watch', () => {
 
 gulp.task('test', () => {
   return gulp.src('test/**/*.spec.js')
-    .pipe(mocha({reporter: 'nyan'}))
-    //.once('error', () => process.exit(1))
-    //.onve('end', () => process.exit())
+    .pipe(mocha({reporter: 'spec'}))
+    ;
 });
