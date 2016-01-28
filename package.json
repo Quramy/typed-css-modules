@@ -16,6 +16,7 @@
   "author": "quramy",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^1.1.1",
     "css-modules-loader-core": "^1.0.0",
     "gaze": "^0.5.2",
     "glob": "^6.0.4",

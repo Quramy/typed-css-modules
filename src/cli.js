@@ -6,6 +6,7 @@ import path from 'path';
 import gaze from 'gaze';
 import glob from 'glob';
 import yargs from 'yargs';
+import chalk from 'chalk';
 import {DtsCreator} from './dtsCreator';
 
 let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
@@ -18,6 +19,7 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('h', 'help').help('h')
+  .version(() => require('../package.json').version)
 let argv = yarg.argv;
 let creator;
 
@@ -25,9 +27,9 @@ let writeFile = f => {
   creator.create(f)
   .then(content => content.writeFile())
   .then(content => {
-    console.log('Wrote ' + content.outputFilePath);
+    console.log('Wrote ' + chalk.green(content.outputFilePath));
     content.messageList.forEach(message => {
-      console.warn('[Warn] ' + message);
+      console.warn('[Warn] ' + chalk.red(message));
     });
   })
   .catch(reason => console.error(reason));
