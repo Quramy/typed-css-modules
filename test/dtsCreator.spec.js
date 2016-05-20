@@ -15,7 +15,7 @@ describe('DtsCreator', () => {
         done();
       });
     });
-    it('returns DtsContent instatnce from composing css', done => {
+    it('returns DtsContent instance from composing css', done => {
       creator.create('test/composer.css').then(content => {
         assert.equal(content.contents.length, 1);
         assert.equal(content.contents[0], "export const root: string;")
@@ -63,7 +63,7 @@ describe('DtsContent', () => {
       });
     });
 
-    it('returns empty object exportion when result list does not any items', done => {
+    it('returns empty object exportion when the result list has no items', done => {
       new DtsCreator().create('test/empty.css').then(content => {
         assert.equal(content.formatted, "export default {};");
         done();
