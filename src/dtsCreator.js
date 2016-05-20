@@ -36,7 +36,7 @@ class DtsContent {
   }
 
   get formatted() {
-    if(!this.resultList || !this.resultList.length) return null;
+    if(!this.resultList || !this.resultList.length) return 'export default {};';
     return this.resultList.join('\n');
   }
 
