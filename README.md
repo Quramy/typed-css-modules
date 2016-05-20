@@ -14,7 +14,7 @@ If you have the following css,
 }
 ```
 
-typed-css-modules creates the following .d.ts files from it:
+typed-css-modules creates the following .d.ts files from the above css:
 
 ```ts
 /* styles.css.d.ts */
@@ -22,7 +22,7 @@ export const primary: string;
 export const myClass: string;
 ```
 
-So, you can import CSS modules in your TypeScript sources:
+So, you can import CSS modules' class or variable into your TypeScript sources:
 
 ```ts
 /* app.ts */
