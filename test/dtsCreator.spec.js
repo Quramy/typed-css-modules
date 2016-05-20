@@ -62,6 +62,13 @@ describe('DtsContent', () => {
         done();
       });
     });
+
+    it('returns empty object exportion when result list does not any items', done => {
+      new DtsCreator().create('test/empty.css').then(content => {
+        assert.equal(content.formatted, "export default {};");
+        done();
+      });
+    });
   });
 
   describe('#writeFile', () => {
