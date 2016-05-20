@@ -166,7 +166,9 @@ If your input CSS file has the followng class names, these invalid tokens are no
 ```
 
 ## Example
-Please see [https://github.com/Quramy/typescript-css-modules-demo](https://github.com/Quramy/typescript-css-modules-demo).
+There is a minimum example in this repository `example` folder. Clone this repository and run `cd example; npm i; npm start`.
+
+Or please see [https://github.com/Quramy/typescript-css-modules-demo](https://github.com/Quramy/typescript-css-modules-demo). It's a working demonstration of CSS Modules with React and TypeScript.
 
 ## License
 This software is released under the MIT License, see LICENSE.txt.
