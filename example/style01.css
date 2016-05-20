@@ -1,12 +1,11 @@
+@value primary: green;
+
 .root {
   color: red;
 }
-.text {
-  color: red;
-}
 
-.hoge {
-  color: red;
+.root:hover {
+  color: @primary;
 }
 
 /* my-class1, myclass-2 are invalid token for typescript */

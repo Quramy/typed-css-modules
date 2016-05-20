@@ -6,8 +6,11 @@ If you have the following css,
 
 ```css
 /* styles.css */
+
+@value primary: red;
+
 .myClass {
-  color: red;
+  color: primary;
 }
 ```
 
@@ -15,6 +18,7 @@ typed-css-modules creates the following .d.ts files from it:
 
 ```ts
 /* styles.css.d.ts */
+export const primary: string;
 export const myClass: string;
 ```
 
@@ -24,6 +28,7 @@ So, you can import CSS modules in your TypeScript sources:
 /* app.ts */
 import * as styles from './styles.css';
 console.log(`<div class="${styles.myClass}"></div>`);
+console.log(`<div style="color: ${styles.primary}"></div>`);
 ```
 
 ## CLI

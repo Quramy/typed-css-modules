@@ -1,4 +1,8 @@
 .DS_Store
 node_modules/
+example/app.js
+example/*.css.d.ts
+example/bundle.js
+example/bundle.css
 *.swp
 *.swo
