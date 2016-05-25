@@ -50,13 +50,18 @@ export default class FileSystemLoader {
       if (tokens) { return resolve(tokens) }
 
       fs.readFile( fileRelativePath, "utf-8", ( err, source ) => {
-        if ( err ) reject( err )
+        if ( err && relativeTo && relativeTo !== '/') {
+          resolve([]);
+        }else if ( err && (!relativeTo || relativeTo === '/')) {
+          reject(err);
+        }else{
           this.core.load( source, rootRelativePath, trace, this.fetch.bind( this ) )
-        .then( ( { injectableSource, exportTokens } ) => {
-          this.sources[trace] = injectableSource
-          this.tokensByFile[fileRelativePath] = exportTokens
-          resolve( exportTokens )
-        }, reject )
+          .then( ( { injectableSource, exportTokens } ) => {
+            this.sources[trace] = injectableSource
+            this.tokensByFile[fileRelativePath] = exportTokens
+            resolve( exportTokens )
+          }, reject )
+        }
       } )
     } )
   }
