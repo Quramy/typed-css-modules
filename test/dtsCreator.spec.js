@@ -29,6 +29,13 @@ describe('DtsCreator', () => {
         done();
       });
     });
+    it('returns DtsCOntent instance from the pair of path and contents', done => {
+      creator.create('test/somePath', `.myClass { color: red }`).then(content => {
+        assert.equal(content.contents.length, 1);
+        assert.equal(content.contents[0], "export const myClass: string;")
+        done();
+      });
+    });
   });
 
   describe('#modify path', () => {

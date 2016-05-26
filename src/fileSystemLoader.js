@@ -30,7 +30,7 @@ export default class FileSystemLoader {
     this.tokensByFile = {};
   }
 
-  fetch( _newPath, relativeTo, _trace ) {
+  fetch( _newPath, relativeTo, _trace, initialContents ) {
     let newPath = _newPath.replace( /^["']|["']$/g, "" ),
       trace = _trace || String.fromCharCode( this.importNr++ )
     return new Promise( ( resolve, reject ) => {
@@ -46,23 +46,32 @@ export default class FileSystemLoader {
         catch (e) {}
       }
 
-      const tokens = this.tokensByFile[fileRelativePath]
-      if (tokens) { return resolve(tokens) }
+      if(!initialContents) {
+        const tokens = this.tokensByFile[fileRelativePath]
+        if (tokens) { return resolve(tokens) }
 
-      fs.readFile( fileRelativePath, "utf-8", ( err, source ) => {
-        if ( err && relativeTo && relativeTo !== '/') {
-          resolve([]);
-        }else if ( err && (!relativeTo || relativeTo === '/')) {
-          reject(err);
-        }else{
-          this.core.load( source, rootRelativePath, trace, this.fetch.bind( this ) )
-          .then( ( { injectableSource, exportTokens } ) => {
-            this.sources[trace] = injectableSource
-            this.tokensByFile[fileRelativePath] = exportTokens
-            resolve( exportTokens )
-          }, reject )
-        }
-      } )
+        fs.readFile( fileRelativePath, "utf-8", ( err, source ) => {
+          if ( err && relativeTo && relativeTo !== '/') {
+            resolve([]);
+          }else if ( err && (!relativeTo || relativeTo === '/')) {
+            reject(err);
+          }else{
+            this.core.load( source, rootRelativePath, trace, this.fetch.bind( this ) )
+            .then( ( { injectableSource, exportTokens } ) => {
+              this.sources[trace] = injectableSource
+              this.tokensByFile[fileRelativePath] = exportTokens
+              resolve( exportTokens )
+            }, reject )
+          }
+        } )
+      }else{
+        this.core.load( initialContents, rootRelativePath, trace, this.fetch.bind(this) )
+        .then( ( { injectableSource, exportTokens } ) => {
+          this.sources[trace] = injectableSource
+          this.tokensByFile[fileRelativePath] = exportTokens
+          resolve( exportTokens )
+        }, reject )
+      }
     } )
   }
 

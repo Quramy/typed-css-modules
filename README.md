@@ -108,10 +108,11 @@ You can set the following options:
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
 
-#### `create(filepath) => Promise(dtsContent)`
+#### `create(filepath, contents) => Promise(dtsContent)`
 Returns `DtsContent` instance.
 
 * `filepath`: path of target .css file.
+* `contents`(optional): the CSS content of the `filepath`. If set, DtsCreator uses the contents instead of the original contents of the `filepath`.
 
 ### class DtsContent
 DtsContent instance has `*.d.ts` content, final output path, and function to write file.

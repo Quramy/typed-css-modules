@@ -80,7 +80,7 @@ export class DtsCreator {
     this.outputDirectory = path.join(this.rootDir, this.outDir);
   }
 
-  create(filePath, clearCache = false) {
+  create(filePath, initialContents, clearCache = false) {
     return new Promise((resolve, reject) => {
       var rInputPath;
       if(path.isAbsolute(filePath)) {
@@ -91,7 +91,7 @@ export class DtsCreator {
       if(clearCache) {
         this.loader.tokensByFile = {};
       }
-      this.loader.fetch(filePath, "/").then(res => {
+      this.loader.fetch(filePath, "/", undefined, initialContents).then(res => {
         if(res) {
           var tokens = res;
           var keys = Object.keys(tokens);
