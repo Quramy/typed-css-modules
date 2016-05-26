@@ -22,6 +22,13 @@ describe('DtsCreator', () => {
         done();
       });
     })
+    it('returns DtsContent instance from composing css whose has invalid import/composes', done => {
+      creator.create('test/invalidComposer.scss').then(content => {
+        assert.equal(content.contents.length, 1);
+        assert.equal(content.contents[0], "export const myClass: string;")
+        done();
+      });
+    });
   });
 
   describe('#modify path', () => {
