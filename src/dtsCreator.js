@@ -9,6 +9,7 @@ import mkdirp from 'mkdirp';
 
 import {TokenValidator} from './tokenValidator';
 import FileSystemLoader from './fileSystemLoader';
+import os from 'os';
 
 let validator = new TokenValidator();
 
@@ -37,7 +38,7 @@ class DtsContent {
 
   get formatted() {
     if(!this.resultList || !this.resultList.length) return 'export default {};';
-    return this.resultList.join('\n');
+    return this.resultList.join(os.EOL);
   }
 
   get tokens() {
