@@ -15,6 +15,7 @@
   "dependencies": {
     "browserify": "^13.0.1",
     "css-modulesify": "^0.24.0",
-    "typescript": "^1.8.10"
+    "typescript": "^1.8.10",
+    "typed-css-modules": "file:../"
   }
 }
