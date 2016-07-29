@@ -124,7 +124,7 @@ export class DtsCreator {
         }else{
           reject(res);
         }
-      });
+      }).catch(err => reject(err));
     });
   }
 }

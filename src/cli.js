@@ -29,10 +29,10 @@ let writeFile = f => {
   .then(content => {
     console.log('Wrote ' + chalk.green(content.outputFilePath));
     content.messageList.forEach(message => {
-      console.warn('[Warn] ' + chalk.red(message));
+      console.warn(chalk.yellow('[Warn] ' + message));
     });
   })
-  .catch(reason => console.error(reason));
+  .catch(reason => console.error(chalk.red('[Error] ' + reason)));
 };
 
 let main = () => {

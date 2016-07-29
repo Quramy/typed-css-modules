@@ -15,6 +15,14 @@ describe('DtsCreator', () => {
         done();
       });
     });
+    it('rejects an error with invalid CSS', done => {
+      creator.create('test/errorCss.css').then(content => {
+        assert.fail();
+      }).catch(err => {
+        assert.equal(err.name, 'CssSyntaxError');
+        done();
+      });
+    });
     it('returns DtsContent instance from composing css', done => {
       creator.create('test/composer.css').then(content => {
         assert.equal(content.contents.length, 1);
