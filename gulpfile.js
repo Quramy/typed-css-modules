@@ -15,6 +15,7 @@ gulp.task('compile', () => {
 
 gulp.task('watch', () => {
   gulp.watch('src/**/*.js', ['compile']);
+  gulp.watch(['lib/**/*.js', 'test/**/*.spec.js', 'test/**/*.css'], ['test']);
 });
 
 gulp.task('test', () => {
