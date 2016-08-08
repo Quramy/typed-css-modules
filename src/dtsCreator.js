@@ -59,7 +59,7 @@ class DtsContent {
       mkdirp.sync(outPathDir);
     }
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.outputFilePath, this.formatted, 'utf8', (err) => {
+      fs.writeFile(this.outputFilePath, this.formatted + os.EOL, 'utf8', (err) => {
         if(err) {
           reject(err);
         }else{
