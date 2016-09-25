@@ -107,6 +107,7 @@ You can set the following options:
 * `option.rootDir`: Project root directory(default: `process.cwd()`). 
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
+* `option.camelCase`: Camelize CSS class tokens. See also [webpack css-loader's option](https://github.com/webpack/css-loader#camel-case).
 
 #### `create(filepath, contents) => Promise(dtsContent)`
 Returns `DtsContent` instance.
@@ -156,6 +157,7 @@ If your input CSS file has the followng class names, these invalid tokens are no
 }
 
 /* invalid TypeScript variable */
+/* If camelCase option is set, this token will be converted to 'myClass' */
 .my-class{
   color: red;
 }

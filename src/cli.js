@@ -15,6 +15,7 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .example('$0 -p styles/**/*.icss -w')
   .detectLocale(false)
   .demand(['_'])
+  .alias('c', 'camelCase').describe('c', 'Convert CSS class tokens to camelcase')
   .alias('o', 'outDir').describe('o', 'Output directory')
   .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
@@ -52,7 +53,7 @@ let main = () => {
   }
   let filesPattern = path.join(searchDir, argv.p || '**/*.css');
   rootDir = process.cwd();
-  creator = new DtsCreator({rootDir, searchDir, outDir: argv.o});
+  creator = new DtsCreator({rootDir, searchDir, outDir: argv.o, camelCase: argv.c});
 
   if(!argv.w) {
     glob(filesPattern, null, (err, files) => {

@@ -6,6 +6,7 @@ import path from'path';
 
 import isThere from 'is-there';
 import mkdirp from 'mkdirp';
+import camelcase from "camelcase"
 
 import {TokenValidator} from './tokenValidator';
 import FileSystemLoader from './fileSystemLoader';
@@ -79,6 +80,7 @@ export class DtsCreator {
     this.loader = new FileSystemLoader(this.rootDir);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
+    this.camelCase = !!options.camelCase;
   }
 
   create(filePath, initialContents, clearCache = false) {
@@ -100,9 +102,10 @@ export class DtsCreator {
           var messageList = [];
 
           keys.forEach(key => {
-            var ret = validator.validate(key);
+            const convertedKey = this.camelCase ? camelcase(key) : key;
+            var ret = validator.validate(convertedKey);
             if(ret.isValid) {
-              validKeys.push(key);
+              validKeys.push(convertedKey);
             }else{
               messageList.push(ret.message);
             }
