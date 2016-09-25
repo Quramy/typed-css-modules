@@ -1,6 +1,6 @@
 {
   "name": "typed-css-modules",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Creates .d.ts files from CSS Modules .css files",
   "main": "index.js",
   "scripts": {
@@ -15,11 +15,13 @@
     "url": "https://github.com/Quramy/typed-css-modules.git"
   },
   "keywords": [
-    "css-modules", "typescript"
+    "css-modules",
+    "typescript"
   ],
   "author": "quramy",
   "license": "MIT",
   "dependencies": {
+    "camelcase": "^3.0.0",
     "chalk": "^1.1.1",
     "css-modules-loader-core": "^1.0.0",
     "gaze": "^1.1.1",
