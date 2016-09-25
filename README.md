@@ -82,6 +82,10 @@ tcm -p src/**/*.icss
 #### watch
 With `-w` or `--watch`, this CLI watches files in the input directory.
 
+#### camelize CSS token
+With `-c` or `--camelCase`, kebab-cased CSS classes(such as `.my-class {...}`) are exported as camelized TypeScript varibale name(`export const myClass: string`).
+See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camel-case).
+
 ## API
 
 ```sh
@@ -107,7 +111,7 @@ You can set the following options:
 * `option.rootDir`: Project root directory(default: `process.cwd()`). 
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
-* `option.camelCase`: Camelize CSS class tokens. See also [webpack css-loader's option](https://github.com/webpack/css-loader#camel-case).
+* `option.camelCase`: Camelize CSS class tokens.
 
 #### `create(filepath, contents) => Promise(dtsContent)`
 Returns `DtsContent` instance.
