@@ -1,6 +1,8 @@
 'use strict';
 
-import process from 'process';
+if (!process) {
+  const process = require('process');
+}
 import fs from 'fs';
 import path from'path';
 
