@@ -77,6 +77,22 @@ describe('DtsContent', () => {
     });
   });
 
+  describe('#outputFilePath', () => {
+    it('adds d.ts to the original filename', done => {
+      new DtsCreator().create('test/testStyle.css').then(content => {
+        assert.equal(path.relative(process.cwd(), content.outputFilePath), "test/testStyle.css.d.ts");
+        done();
+      });
+    });
+
+    it('can drop the original extension when asked', done => {
+      new DtsCreator({dropExtension: true}).create('test/testStyle.css').then(content => {
+        assert.equal(path.relative(process.cwd(), content.outputFilePath), "test/testStyle.d.ts");
+        done();
+      });
+    });
+  });
+
   describe('#formatted', () => {
     it('returns formatted .d.ts string', done => {
       new DtsCreator().create('test/testStyle.css').then(content => {
