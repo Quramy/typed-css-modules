@@ -2,7 +2,7 @@
 
 Creates TypeScript definition files from [CSS Modules](https://github.com/css-modules/css-modules) .css files.
 
-If you have the following css, 
+If you have the following css,
 
 ```css
 /* styles.css */
@@ -37,7 +37,7 @@ console.log(`<div style="color: ${styles.primary}"></div>`);
 npm install -g typed-css-modules
 ```
 
-And exec `tcm <input directory>` command. 
+And exec `tcm <input directory>` command.
 For example, if you have .css files under `src` directory, exec the following:
 
 ```sh
@@ -84,7 +84,24 @@ With `-w` or `--watch`, this CLI watches files in the input directory.
 
 #### camelize CSS token
 With `-c` or `--camelCase`, kebab-cased CSS classes(such as `.my-class {...}`) are exported as camelized TypeScript varibale name(`export const myClass: string`).
-See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camel-case).
+
+
+You can pass `--camelCase dashes` to only camelize dashes in the class name. Since version `0.27.1` in the
+webpack `css-loader`. This will keep upperCase class names intact, e.g.:
+
+```css
+.SomeComponent {
+  height: 10px;
+}
+```
+
+becomes
+
+```typescript
+export const SomeComponent: string;
+```
+
+See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camelcase).
 
 ## API
 
@@ -108,7 +125,7 @@ DtsCreator instance processes the input CSS and create TypeScript definition con
 #### `new DtsCreator(option)`
 You can set the following options:
 
-* `option.rootDir`: Project root directory(default: `process.cwd()`). 
+* `option.rootDir`: Project root directory(default: `process.cwd()`).
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
 * `option.camelCase`: Camelize CSS class tokens.

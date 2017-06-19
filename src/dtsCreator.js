@@ -88,7 +88,7 @@ export class DtsCreator {
     this.loader = new FileSystemLoader(this.rootDir);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
-    this.camelCase = !!options.camelCase;
+    this.camelCase = options.camelCase;
     this.dropExtension = !!options.dropExtension;
   }
 
@@ -110,8 +110,10 @@ export class DtsCreator {
           var validKeys = [], invalidKeys = [];
           var messageList = [];
 
+          var convertKey = this.getConvertKeyMethod(this.camelCase);
+
           keys.forEach(key => {
-            const convertedKey = this.camelCase ? camelcase(key) : key;
+            const convertedKey = convertKey(key);
             var ret = validator.validate(convertedKey);
             if(ret.isValid) {
               validKeys.push(convertedKey);
@@ -140,4 +142,29 @@ export class DtsCreator {
       }).catch(err => reject(err));
     });
   }
+
+  getConvertKeyMethod(camelCaseOption) {
+    switch (camelCaseOption) {
+      case true:
+        return camelcase;
+      case 'dashes':
+        return this.dashesCamelCase;
+      default:
+        return (key) => key;
+    }
+  }
+
+  /**
+   * Replaces only the dashes and leaves the rest as-is.
+   *
+   * Mirrors the behaviour of the css-loader:
+   * https://github.com/webpack-contrib/css-loader/blob/1fee60147b9dba9480c9385e0f4e581928ab9af9/lib/compile-exports.js#L3-L7
+   */
+  dashesCamelCase(str) {
+    return str.replace(/-+(\w)/g, function(match, firstLetter) {
+      return firstLetter.toUpperCase();
+    });
+  }
+
+
 }
