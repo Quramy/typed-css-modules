@@ -14,8 +14,14 @@ import os from 'os';
 
 let validator = new TokenValidator();
 
+function removeExtension(filePath) {
+  const ext = path.extname(filePath);
+  return filePath.replace(new RegExp(ext + '$'), '');
+}
+
 class DtsContent {
   constructor({
+    dropExtension,
     rootDir,
     searchDir,
     outDir,
@@ -24,6 +30,7 @@ class DtsContent {
     resultList,
     messageList
   }) {
+    this.dropExtension = dropExtension;
     this.rootDir = rootDir;
     this.searchDir = searchDir;
     this.outDir = outDir;
@@ -47,7 +54,8 @@ class DtsContent {
   }
 
   get outputFilePath() {
-    return path.join(this.rootDir, this.outDir, this.rInputPath + '.d.ts');
+    const outputFileName = this.dropExtension ? removeExtension(this.rInputPath) : this.rInputPath;
+    return path.join(this.rootDir, this.outDir, outputFileName + '.d.ts');
   }
 
   get inputFilePath() {
@@ -81,6 +89,7 @@ export class DtsCreator {
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
     this.camelCase = !!options.camelCase;
+    this.dropExtension = !!options.dropExtension;
   }
 
   create(filePath, initialContents, clearCache = false) {
@@ -114,6 +123,7 @@ export class DtsCreator {
           var result = validKeys.map(k => ('export const ' + k + ': string;'));
 
           var content = new DtsContent({
+            dropExtension: this.dropExtension,
             rootDir: this.rootDir,
             searchDir: this.searchDir,
             outDir: this.outDir,
