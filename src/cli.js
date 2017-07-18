@@ -3,7 +3,7 @@
 'use strict';
 
 import path from 'path';
-import gaze from 'gaze';
+import chokidar from 'chokidar';
 import glob from 'glob';
 import yargs from 'yargs';
 import chalk from 'chalk';
@@ -25,7 +25,7 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
 let argv = yarg.argv;
 let creator;
 
-let writeFile = f => {
+function writeFile(f) {
   creator.create(f, null, !!argv.w)
   .then(content => content.writeFile())
   .then(content => {
@@ -71,12 +71,12 @@ let main = () => {
       if(!files || !files.length) return;
       files.forEach(writeFile);
     });
-  }else{
+  } else {
     console.log('Watch ' + filesPattern + '...');
-    gaze(filesPattern, function(err, files) {
-      this.on('changed', writeFile);
-      this.on('added', writeFile);
-    });
+
+    var watcher = chokidar.watch(filesPattern);
+    watcher.on('add', writeFile);
+    watcher.on('change', writeFile);
   }
 };
 
