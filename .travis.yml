@@ -6,13 +6,7 @@ env:
   - GIT_AUTHOR_EMAIL=yosuke.kurami@gmail.com
 language: node_js
 node_js:
-- 4.2.3
-before_install:
-- yarn global add gulp
-- yarn
-- script:
-- gulp compile
-- gulp test
+- 6.11.1
 deploy:
   provider: npm
   email: yosuke.kurami@gmail.com
