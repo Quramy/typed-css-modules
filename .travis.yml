@@ -8,9 +8,9 @@ language: node_js
 node_js:
 - 4.2.3
 before_install:
-- npm install -g gulp
-- npm install
-script:
+- yarn global add gulp
+- yarn
+- script:
 - gulp compile
 - gulp test
 deploy:
