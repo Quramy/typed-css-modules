@@ -108,12 +108,29 @@ describe('DtsContent', () => {
       });
     });
 
-    it('returns camelized tokens when the camelCase option is set', done => {
-      new DtsCreator({camelCase: true}).create('test/kebabed.css').then(content => {
-        assert.equal(content.formatted, "export const myClass: string;");
-        done();
+    describe('#camelCase option', () => {
+      it('camelCase == true: returns camelized tokens for lowercase classes', done => {
+        new DtsCreator({camelCase: true}).create('test/kebabed.css').then(content => {
+          assert.equal(content.formatted, "export const myClass: string;");
+          done();
+        });
+      });
+
+      it('camelCase == true: returns camelized tokens for uppercase classes ', done => {
+        new DtsCreator({camelCase: true}).create('test/kebabedUpperCase.css').then(content => {
+          assert.equal(content.formatted, "export const myClass: string;");
+          done();
+        });
+      });
+
+      it('camelCase == "dashes": returns camelized tokens for dashes only', done => {
+        new DtsCreator({camelCase: 'dashes'}).create('test/kebabedUpperCase.css').then(content => {
+          assert.equal(content.formatted, "export const MyClass: string;");
+          done();
+        });
       });
     });
+
   });
 
   describe('#writeFile', () => {
