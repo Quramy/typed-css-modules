@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "gulp compile",
+    "watch": "gulp watch",
     "test": "npm run build && gulp test",
     "prepublish": "npm run build"
   },
