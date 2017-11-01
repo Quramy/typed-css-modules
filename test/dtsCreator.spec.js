@@ -103,7 +103,7 @@ describe('DtsContent', () => {
 
     it('returns empty object exportion when the result list has no items', done => {
       new DtsCreator().create('test/empty.css').then(content => {
-        assert.equal(content.formatted, "export default {};");
+        assert.equal(content.formatted, "");
         done();
       });
     });
