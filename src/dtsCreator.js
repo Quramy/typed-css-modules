@@ -45,7 +45,7 @@ class DtsContent {
   }
 
   get formatted() {
-    if(!this.resultList || !this.resultList.length) return 'export default {};';
+    if(!this.resultList || !this.resultList.length) return '';
     return this.resultList.join(os.EOL);
   }
 
