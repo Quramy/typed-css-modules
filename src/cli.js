@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 import path from 'path';
 import chokidar from 'chokidar';
 import glob from 'glob';

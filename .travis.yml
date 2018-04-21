@@ -8,6 +8,14 @@ language: node_js
 node_js:
 - 6
 - 8
+- 9
+
+before_script:
+  - yarn install --frozen-lockfile
+
+script:
+  - yarn test:ci
+
 deploy:
   provider: npm
   email: yosuke.kurami@gmail.com
