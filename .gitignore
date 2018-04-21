@@ -7,3 +7,4 @@ example/bundle.css
 *.swp
 *.swo
 lib/
+coverage/
