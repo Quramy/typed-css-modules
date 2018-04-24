@@ -72,7 +72,7 @@ let main = () => {
   } else {
     console.log('Watch ' + filesPattern + '...');
 
-    var watcher = chokidar.watch(filesPattern);
+    var watcher = chokidar.watch([filesPattern.replace(/\\/g, "/")]);
     watcher.on('add', writeFile);
     watcher.on('change', writeFile);
   }
