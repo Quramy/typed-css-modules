@@ -28,7 +28,8 @@ class DtsContent {
     rInputPath,
     rawTokenList,
     resultList,
-    messageList
+    messageList,
+    EOL
   }) {
     this.dropExtension = dropExtension;
     this.rootDir = rootDir;
@@ -38,6 +39,7 @@ class DtsContent {
     this.rawTokenList = rawTokenList;
     this.resultList = resultList;
     this.messageList = messageList;
+    this.EOL = EOL;
   }
 
   get contents() {
@@ -46,7 +48,7 @@ class DtsContent {
 
   get formatted() {
     if(!this.resultList || !this.resultList.length) return '';
-    return this.resultList.join(os.EOL);
+    return this.resultList.join(this.EOL);
   }
 
   get tokens() {
@@ -68,7 +70,7 @@ class DtsContent {
       mkdirp.sync(outPathDir);
     }
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.outputFilePath, this.formatted + os.EOL, 'utf8', (err) => {
+      fs.writeFile(this.outputFilePath, this.formatted + this.EOL, 'utf8', (err) => {
         if(err) {
           reject(err);
         }else{
@@ -90,6 +92,7 @@ export class DtsCreator {
     this.outputDirectory = path.join(this.rootDir, this.outDir);
     this.camelCase = options.camelCase;
     this.dropExtension = !!options.dropExtension;
+    this.EOL = options.EOL || os.EOL;
   }
 
   create(filePath, initialContents, clearCache = false) {
@@ -132,7 +135,8 @@ export class DtsCreator {
             rInputPath,
             rawTokenList: keys,
             resultList: result,
-            messageList
+            messageList,
+            EOL: this.EOL
           });
 
           resolve(content);
