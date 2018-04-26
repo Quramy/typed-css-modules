@@ -129,6 +129,7 @@ You can set the following options:
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
 * `option.camelCase`: Camelize CSS class tokens.
+* `option.EOL`: EOL (end of line) for the generated `d.ts` files. Possible values `'\n'` or `'\r\n'`(default: `os.EOL`).
 
 #### `create(filepath, contents) => Promise(dtsContent)`
 Returns `DtsContent` instance.
