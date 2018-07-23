@@ -18,6 +18,7 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
+  .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" or warning messages').boolean('s')
   .alias('h', 'help').help('h')
   .version(() => require('../package.json').version)
 let argv = yarg.argv;
@@ -27,10 +28,12 @@ function writeFile(f) {
   creator.create(f, null, !!argv.w)
   .then(content => content.writeFile())
   .then(content => {
-    console.log('Wrote ' + chalk.green(content.outputFilePath));
-    content.messageList.forEach(message => {
-      console.warn(chalk.yellow('[Warn] ' + message));
-    });
+    if (!argv.s) {
+      console.log('Wrote ' + chalk.green(content.outputFilePath));
+      content.messageList.forEach(message => {
+        console.warn(chalk.yellow('[Warn] ' + message));
+      });
+    }
   })
   .catch(reason => console.error(chalk.red('[Error] ' + reason)));
 };
