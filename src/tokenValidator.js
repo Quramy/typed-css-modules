@@ -10,7 +10,7 @@ export class TokenValidator {
         message: 'empty token'
       };
     }
-    if(!/^[$_a-zA-Z][0-9a-zA-Z$_]*$/.test(key)) {
+    if(!/^[$_a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ$_]*$/.test(key)) {
       return {
         isValid: false,
         message: key + ' is not valid TypeScript variable name.'
