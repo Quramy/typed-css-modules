@@ -47,8 +47,8 @@ class DtsContent {
   }
 
   get formatted() {
-    if(!this.resultList || !this.resultList.length) return '';
-    return this.resultList.join(this.EOL);
+    if(!this.resultList || !this.resultList.length || this.resultList.length === 0) return '';
+    return this.resultList.join(this.EOL) + this.EOL;
   }
 
   get tokens() {
@@ -70,7 +70,7 @@ class DtsContent {
       mkdirp.sync(outPathDir);
     }
     return new Promise((resolve, reject) => {
-      fs.writeFile(this.outputFilePath, this.formatted + this.EOL, 'utf8', (err) => {
+      fs.writeFile(this.outputFilePath, this.formatted, 'utf8', (err) => {
         if(err) {
           reject(err);
         }else{
