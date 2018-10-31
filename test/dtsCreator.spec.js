@@ -3,6 +3,7 @@
 var path = require('path');
 var assert = require('assert');
 var DtsCreator = require('../lib/dtsCreator').DtsCreator;
+var os = require('os');
 
 describe('DtsCreator', () => {
   var creator = new DtsCreator();
@@ -96,7 +97,7 @@ describe('DtsContent', () => {
   describe('#formatted', () => {
     it('returns formatted .d.ts string', done => {
       new DtsCreator().create('test/testStyle.css').then(content => {
-        assert.equal(content.formatted, "export const myClass: string;");
+        assert.equal(content.formatted, "export const myClass: string;" + os.EOL);
         done();
       });
     });
@@ -111,21 +112,21 @@ describe('DtsContent', () => {
     describe('#camelCase option', () => {
       it('camelCase == true: returns camelized tokens for lowercase classes', done => {
         new DtsCreator({camelCase: true}).create('test/kebabed.css').then(content => {
-          assert.equal(content.formatted, "export const myClass: string;");
+          assert.equal(content.formatted, "export const myClass: string;" + os.EOL);
           done();
         });
       });
 
       it('camelCase == true: returns camelized tokens for uppercase classes ', done => {
         new DtsCreator({camelCase: true}).create('test/kebabedUpperCase.css').then(content => {
-          assert.equal(content.formatted, "export const myClass: string;");
+          assert.equal(content.formatted, "export const myClass: string;" + os.EOL);
           done();
         });
       });
 
       it('camelCase == "dashes": returns camelized tokens for dashes only', done => {
         new DtsCreator({camelCase: 'dashes'}).create('test/kebabedUpperCase.css').then(content => {
-          assert.equal(content.formatted, "export const MyClass: string;");
+          assert.equal(content.formatted, "export const MyClass: string;" + os.EOL);
           done();
         });
       });
