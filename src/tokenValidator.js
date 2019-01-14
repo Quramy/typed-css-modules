@@ -6,24 +6,28 @@ export class TokenValidator {
   validate(key) {
     if(!key) {
       return {
-        isValid: false,
+        isValidVariableName: false,
+        isValidObjectKeyName: false,
         message: 'empty token'
       };
     }
     if(!/^[$_a-zA-ZÀ-ÿ][0-9a-zA-ZÀ-ÿ$_]*$/.test(key)) {
       return {
-        isValid: false,
+        isValidVariableName: false,
+        isValidObjectKeyName: true,
         message: key + ' is not valid TypeScript variable name.'
       };
     }
     if(RESERVED_WORDS.some(w => w === key)) {
       return {
-        isValid: false,
+        isValidVariableName: false,
+        isValidObjectKeyName: true,
         message: key + ' is TypeScript reserved word.'
       };
     }
     return {
-      isValid: true
+      isValidVariableName: true,
+      isValidObjectKeyName: true,
     };
   }
 }

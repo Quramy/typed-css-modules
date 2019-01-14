@@ -48,7 +48,15 @@ class DtsContent {
 
   get formatted() {
     if(!this.resultList || !this.resultList.length || this.resultList.length === 0) return '';
-    return this.resultList.join(this.EOL) + this.EOL;
+
+    const formatted = `declare const styles: {
+${this.resultList.join('\n')}
+};
+
+export = styles;
+`;
+
+    return formatted.replace(/\n/g, this.EOL);
   }
 
   get tokens() {
@@ -114,18 +122,20 @@ export class DtsCreator {
           var messageList = [];
 
           var convertKey = this.getConvertKeyMethod(this.camelCase);
+          const resultList = [];
 
           keys.forEach(key => {
             const convertedKey = convertKey(key);
             var ret = validator.validate(convertedKey);
-            if(ret.isValid) {
+            if(ret.isValidVariableName) {
               validKeys.push(convertedKey);
+              resultList.push(`  readonly ${convertedKey}: string;`);
+            }else if (ret.isValidObjectKeyName) {
+              resultList.push(`  readonly '${convertedKey}': string;`);
             }else{
               messageList.push(ret.message);
             }
           });
-
-          var result = validKeys.map(k => ('export const ' + k + ': string;'));
 
           var content = new DtsContent({
             dropExtension: this.dropExtension,
@@ -134,7 +144,7 @@ export class DtsCreator {
             outDir: this.outDir,
             rInputPath,
             rawTokenList: keys,
-            resultList: result,
+            resultList,
             messageList,
             EOL: this.EOL
           });
