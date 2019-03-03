@@ -8,11 +8,8 @@ import isThere from 'is-there';
 import mkdirp from 'mkdirp';
 import camelcase from "camelcase"
 
-import {TokenValidator} from './tokenValidator';
 import FileSystemLoader from './fileSystemLoader';
 import os from 'os';
-
-let validator = new TokenValidator();
 
 function removeExtension(filePath) {
   const ext = path.extname(filePath);
@@ -28,7 +25,6 @@ class DtsContent {
     rInputPath,
     rawTokenList,
     resultList,
-    messageList,
     EOL
   }) {
     this.dropExtension = dropExtension;
@@ -38,7 +34,6 @@ class DtsContent {
     this.rInputPath = rInputPath;
     this.rawTokenList = rawTokenList;
     this.resultList = resultList;
-    this.messageList = messageList;
     this.EOL = EOL;
   }
 
@@ -47,8 +42,14 @@ class DtsContent {
   }
 
   get formatted() {
-    if(!this.resultList || !this.resultList.length || this.resultList.length === 0) return '';
-    return this.resultList.join(this.EOL) + this.EOL;
+    if(!this.resultList || !this.resultList.length) return '';
+    return [
+      'declare const styles: {',
+      ...this.resultList.map(line => '  ' + line),
+      '};',
+      'export = styles;',
+      ''
+    ].join(os.EOL) + this.EOL;
   }
 
   get tokens() {
@@ -110,22 +111,12 @@ export class DtsCreator {
         if(res) {
           var tokens = res;
           var keys = Object.keys(tokens);
-          var validKeys = [], invalidKeys = [];
-          var messageList = [];
 
           var convertKey = this.getConvertKeyMethod(this.camelCase);
 
-          keys.forEach(key => {
-            const convertedKey = convertKey(key);
-            var ret = validator.validate(convertedKey);
-            if(ret.isValid) {
-              validKeys.push(convertedKey);
-            }else{
-              messageList.push(ret.message);
-            }
-          });
-
-          var result = validKeys.map(k => ('export const ' + k + ': string;'));
+          var result = keys
+            .map(k => convertKey(k))
+            .map(k => 'readonly "' + k + '": string;')
 
           var content = new DtsContent({
             dropExtension: this.dropExtension,
@@ -135,7 +126,6 @@ export class DtsCreator {
             rInputPath,
             rawTokenList: keys,
             resultList: result,
-            messageList,
             EOL: this.EOL
           });
 
