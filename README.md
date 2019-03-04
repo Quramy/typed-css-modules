@@ -18,8 +18,11 @@ typed-css-modules creates the following .d.ts files from the above css:
 
 ```ts
 /* styles.css.d.ts */
-export const primary: string;
-export const myClass: string;
+declare const styles: {
+  readonly "primary": string;
+  readonly "myClass": string;
+};
+export = styles;
 ```
 
 So, you can import CSS modules' class or variable into your TypeScript sources:
