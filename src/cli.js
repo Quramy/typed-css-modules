@@ -30,9 +30,11 @@ function writeFile(f) {
   .then(content => {
     if (!argv.s) {
       console.log('Wrote ' + chalk.green(content.outputFilePath));
-      content.messageList.forEach(message => {
-        console.warn(chalk.yellow('[Warn] ' + message));
-      });
+      if (content.messageList && content.messageList.length) {
+        content.messageList.forEach(message => {
+          console.warn(chalk.yellow('[Warn] ' + message));
+        });
+      }
     }
   })
   .catch(reason => console.error(chalk.red('[Error] ' + reason)));
