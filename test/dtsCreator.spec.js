@@ -121,6 +121,25 @@ export = styles;
       });
     });
 
+    describe('#exportDefault option', () => {
+      it('returns formatted .d.ts string', done => {
+        new DtsCreator({ exportDefault: true }).create('test/testStyleExportDefault.css').then(content => {
+          assert.equal(
+            content.formatted,
+            `\
+declare const styles: {
+  readonly "myClass": string;
+  readonly "anotherClass": string;
+};
+export default styles;
+
+`
+          );
+          done();
+        });
+      });
+    })
+
     describe('#camelCase option', () => {
       it('camelCase == true: returns camelized tokens for lowercase classes', done => {
         new DtsCreator({ camelCase: true })
