@@ -19,6 +19,7 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
   .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" or warning messages').boolean('s')
+  .alias('x', 'exportDefault').describe('x', 'Use "export default" syntax for .d.ts files').boolean('x')
   .alias('h', 'help').help('h')
   .version(() => require('../package.json').version)
 let argv = yarg.argv;
@@ -62,7 +63,8 @@ let main = () => {
     searchDir,
     outDir: argv.o,
     camelCase: argv.c,
-    dropExtension: argv.d
+    dropExtension: argv.d,
+    defaultExport: argv.x
   });
 
   if(!argv.w) {

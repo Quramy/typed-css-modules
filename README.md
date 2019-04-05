@@ -106,6 +106,33 @@ export const SomeComponent: string;
 
 See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camelcase).
 
+#### Use `export default` syntax
+With `-x` or `--exportDefault`, this tool will use the [export default declaration syntax](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#11342-export-default-declarations) rather than the default [export assignment syntax](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#1135-export-assignments).
+
+If you have the following css,
+
+```css
+/* stylesWithExportDefault.css */
+
+@value primary: red;
+
+.myClass {
+  color: primary;
+}
+```
+
+typed-css-modules creates the following .d.ts files from the above css:
+
+```ts
+/* stylesWithExportDefault.css.d.ts */
+declare const styles: {
+  readonly "primary": string;
+  readonly "myClass": string;
+};
+export default styles;
+```
+
+
 ## API
 
 ```sh
@@ -133,6 +160,7 @@ You can set the following options:
 * `option.outDir`: Output directory(default: `option.searchDir`).
 * `option.camelCase`: Camelize CSS class tokens.
 * `option.EOL`: EOL (end of line) for the generated `d.ts` files. Possible values `'\n'` or `'\r\n'`(default: `os.EOL`).
+* `option.exportDefault`: Uses `export default styles` syntax fir the generated `d.ts` files.
 
 #### `create(filepath, contents) => Promise(dtsContent)`
 Returns `DtsContent` instance.

@@ -25,7 +25,8 @@ class DtsContent {
     rInputPath,
     rawTokenList,
     resultList,
-    EOL
+    EOL,
+    exportDefault
   }) {
     this.dropExtension = dropExtension;
     this.rootDir = rootDir;
@@ -35,6 +36,7 @@ class DtsContent {
     this.rawTokenList = rawTokenList;
     this.resultList = resultList;
     this.EOL = EOL;
+    this.exportDefault = exportDefault;
   }
 
   get contents() {
@@ -47,7 +49,7 @@ class DtsContent {
       'declare const styles: {',
       ...this.resultList.map(line => '  ' + line),
       '};',
-      'export = styles;',
+      this.exportDefault ? 'export default styles;' : 'export = styles;',
       ''
     ].join(os.EOL) + this.EOL;
   }
@@ -94,6 +96,7 @@ export class DtsCreator {
     this.camelCase = options.camelCase;
     this.dropExtension = !!options.dropExtension;
     this.EOL = options.EOL || os.EOL;
+    this.exportDefault = !!options.exportDefault;
   }
 
   create(filePath, initialContents, clearCache = false) {
@@ -126,7 +129,8 @@ export class DtsCreator {
             rInputPath,
             rawTokenList: keys,
             resultList: result,
-            EOL: this.EOL
+            EOL: this.EOL,
+            exportDefault: this.exportDefault
           });
 
           resolve(content);
