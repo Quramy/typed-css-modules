@@ -64,7 +64,7 @@ let main = () => {
     outDir: argv.o,
     camelCase: argv.c,
     dropExtension: argv.d,
-    defaultExport: argv.x
+    exportDefault: argv.x
   });
 
   if(!argv.w) {
