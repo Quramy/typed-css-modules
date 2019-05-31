@@ -1,47 +1,56 @@
-'use strict';
-
-import process from 'process';
-import fs from 'fs';
-import path from'path';
+import * as process from 'process';
+import * as fs from 'fs';
+import * as path from'path';
 
 import isThere from 'is-there';
-import mkdirp from 'mkdirp';
+import * as mkdirp from 'mkdirp';
 import camelcase from "camelcase"
 
 import FileSystemLoader from './fileSystemLoader';
-import os from 'os';
+import * as os from 'os';
 
-function removeExtension(filePath) {
+function removeExtension(filePath: string): string {
   const ext = path.extname(filePath);
   return filePath.replace(new RegExp(ext + '$'), '');
 }
 
+interface DtsContentOptions {
+  dropExtension: boolean;
+  rootDir: string;
+  searchDir: string;
+  outDir: string;
+  rInputPath: string;
+  rawTokenList: string[];
+  resultList: string[];
+  EOL: string;
+}
+
 class DtsContent {
-  constructor({
-    dropExtension,
-    rootDir,
-    searchDir,
-    outDir,
-    rInputPath,
-    rawTokenList,
-    resultList,
-    EOL
-  }) {
-    this.dropExtension = dropExtension;
-    this.rootDir = rootDir;
-    this.searchDir = searchDir;
-    this.outDir = outDir;
-    this.rInputPath = rInputPath;
-    this.rawTokenList = rawTokenList;
-    this.resultList = resultList;
-    this.EOL = EOL;
+  private dropExtension: boolean;
+  private rootDir: string;
+  private searchDir: string;
+  private outDir: string;
+  private rInputPath: string;
+  private rawTokenList: string[];
+  private resultList: string[];
+  private EOL: string;
+
+  constructor(options: DtsContentOptions) {
+    this.dropExtension = options.dropExtension;
+    this.rootDir = options.rootDir;
+    this.searchDir = options.searchDir;
+    this.outDir = options.outDir;
+    this.rInputPath = options.rInputPath;
+    this.rawTokenList = options.rawTokenList;
+    this.resultList = options.resultList;
+    this.EOL = options.EOL;
   }
 
-  get contents() {
+  public get contents(): string[] {
     return this.resultList;
   }
 
-  get formatted() {
+  public get formatted(): string {
     if(!this.resultList || !this.resultList.length) return '';
     return [
       'declare const styles: {',
@@ -52,20 +61,20 @@ class DtsContent {
     ].join(os.EOL) + this.EOL;
   }
 
-  get tokens() {
+  public get tokens(): string[] {
     return this.rawTokenList;
   }
 
-  get outputFilePath() {
+  public get outputFilePath(): string {
     const outputFileName = this.dropExtension ? removeExtension(this.rInputPath) : this.rInputPath;
     return path.join(this.rootDir, this.outDir, outputFileName + '.d.ts');
   }
 
-  get inputFilePath() {
+  public get inputFilePath(): string {
     return path.join(this.rootDir, this.searchDir, this.rInputPath);
   }
 
-  writeFile() {
+  public writeFile(): Promise<DtsContent> {
     var outPathDir = path.dirname(this.outputFilePath);
     if(!isThere(outPathDir)) {
       mkdirp.sync(outPathDir);
@@ -82,8 +91,29 @@ class DtsContent {
   }
 }
 
+type CamelCaseOption = boolean | 'dashes' | undefined;
+
+interface DtsCreatorOptions {
+  rootDir?: string;
+  searchDir?: string;
+  outDir?: string;
+  camelCase?: CamelCaseOption;
+  dropExtension?: boolean;
+  EOL?: string;
+}
+
 export class DtsCreator {
-  constructor(options) {
+  private rootDir: string;
+  private searchDir: string;
+  private outDir: string;
+  private loader: FileSystemLoader;
+  private inputDirectory: string;
+  private outputDirectory: string;
+  private camelCase: boolean | 'dashes' | undefined;
+  private dropExtension: boolean;
+  private EOL: string;
+
+  constructor(options?: DtsCreatorOptions) {
     if(!options) options = {};
     this.rootDir = options.rootDir || process.cwd();
     this.searchDir = options.searchDir || '';
@@ -96,9 +126,9 @@ export class DtsCreator {
     this.EOL = options.EOL || os.EOL;
   }
 
-  create(filePath, initialContents, clearCache = false) {
+  create(filePath: string, initialContents?: string, clearCache: boolean = false): Promise<DtsContent> {
     return new Promise((resolve, reject) => {
-      var rInputPath;
+      let rInputPath: string;
       if(path.isAbsolute(filePath)) {
         rInputPath = path.relative(this.inputDirectory, filePath);
       }else{
@@ -107,7 +137,7 @@ export class DtsCreator {
       if(clearCache) {
         this.loader.tokensByFile = {};
       }
-      this.loader.fetch(filePath, "/", undefined, initialContents).then(res => {
+      this.loader.fetch(filePath, "/", undefined, initialContents).then((res) => {
         if(res) {
           var tokens = res;
           var keys = Object.keys(tokens);
@@ -137,7 +167,7 @@ export class DtsCreator {
     });
   }
 
-  getConvertKeyMethod(camelCaseOption) {
+  private getConvertKeyMethod(camelCaseOption: CamelCaseOption): (str: string) => string {
     switch (camelCaseOption) {
       case true:
         return camelcase;
@@ -154,7 +184,7 @@ export class DtsCreator {
    * Mirrors the behaviour of the css-loader:
    * https://github.com/webpack-contrib/css-loader/blob/1fee60147b9dba9480c9385e0f4e581928ab9af9/lib/compile-exports.js#L3-L7
    */
-  dashesCamelCase(str) {
+  private dashesCamelCase(str: string): string {
     return str.replace(/-+(\w)/g, function(match, firstLetter) {
       return firstLetter.toUpperCase();
     });
