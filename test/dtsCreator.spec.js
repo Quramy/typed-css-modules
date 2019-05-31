@@ -2,7 +2,7 @@
 
 var path = require('path');
 var assert = require('assert');
-var DtsCreator = require('../lib/dtsCreator').DtsCreator;
+var DtsCreator = require('../lib/DtsCreator').DtsCreator;
 var os = require('os');
 
 describe('DtsCreator', () => {
