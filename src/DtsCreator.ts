@@ -41,45 +41,43 @@ export class DtsCreator {
     this.EOL = options.EOL || os.EOL;
   }
 
-  create(filePath: string, initialContents?: string, clearCache: boolean = false): Promise<DtsContent> {
-    return new Promise((resolve, reject) => {
-      let rInputPath: string;
-      if(path.isAbsolute(filePath)) {
-        rInputPath = path.relative(this.inputDirectory, filePath);
-      }else{
-        rInputPath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
-      }
-      if(clearCache) {
-        this.loader.tokensByFile = {};
-      }
-      this.loader.fetch(filePath, "/", undefined, initialContents).then((res) => {
-        if(res) {
-          var tokens = res;
-          var keys = Object.keys(tokens);
+  public async create(filePath: string, initialContents?: string, clearCache: boolean = false): Promise<DtsContent> {
+    let rInputPath: string;
+    if(path.isAbsolute(filePath)) {
+      rInputPath = path.relative(this.inputDirectory, filePath);
+    }else{
+      rInputPath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
+    }
+    if(clearCache) {
+      this.loader.tokensByFile = {};
+    }
 
-          var convertKey = this.getConvertKeyMethod(this.camelCase);
+    const res = await this.loader.fetch(filePath, "/", undefined, initialContents);
+    if(res) {
+      var tokens = res;
+      var keys = Object.keys(tokens);
 
-          var result = keys
-            .map(k => convertKey(k))
-            .map(k => 'readonly "' + k + '": string;')
+      var convertKey = this.getConvertKeyMethod(this.camelCase);
 
-          var content = new DtsContent({
-            dropExtension: this.dropExtension,
-            rootDir: this.rootDir,
-            searchDir: this.searchDir,
-            outDir: this.outDir,
-            rInputPath,
-            rawTokenList: keys,
-            resultList: result,
-            EOL: this.EOL
-          });
+      var result = keys
+        .map(k => convertKey(k))
+        .map(k => 'readonly "' + k + '": string;')
 
-          resolve(content);
-        }else{
-          reject(res);
-        }
-      }).catch(err => reject(err));
-    });
+      var content = new DtsContent({
+        dropExtension: this.dropExtension,
+        rootDir: this.rootDir,
+        searchDir: this.searchDir,
+        outDir: this.outDir,
+        rInputPath,
+        rawTokenList: keys,
+        resultList: result,
+        EOL: this.EOL
+      });
+
+      return content;
+    }else{
+      throw res;
+    }
   }
 
   private getConvertKeyMethod(camelCaseOption: CamelCaseOption): (str: string) => string {

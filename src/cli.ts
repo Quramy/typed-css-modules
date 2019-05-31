@@ -6,6 +6,7 @@ import glob from 'glob';
 import * as yargs from 'yargs';
 import chalk from 'chalk';
 import {DtsCreator} from './DtsCreator';
+import {DtsContent} from "./DtsContent";
 
 let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
   .example('$0 src/styles', '')
@@ -24,15 +25,18 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
 let argv = yarg.argv;
 let creator: DtsCreator;
 
-function writeFile(f: string) {
-  creator.create(f, undefined, !!argv.w)
-  .then(content => content.writeFile())
-  .then(content => {
+async function writeFile(f: string): Promise<void> {
+  try {
+    const content: DtsContent = await creator.create(f, undefined, !!argv.w);
+    await content.writeFile();
+
     if (!argv.s) {
       console.log('Wrote ' + chalk.green(content.outputFilePath));
     }
-  })
-  .catch((reason: unknown) => console.error(chalk.red('[Error] ' + reason)));
+  }
+  catch (error) {
+    console.error(chalk.red('[Error] ' + error));
+  }
 };
 
 let main = () => {
