@@ -6,6 +6,10 @@ import * as path from 'path'
 import { Plugin } from "postcss";
 
 
+type Dictionary<T> = {
+  [key: string]: T | undefined;
+};
+
 export default class FileSystemLoader {
   private root: string;
   private sources: Dictionary<string>;
@@ -65,35 +69,4 @@ export default class FileSystemLoader {
       }
     } )
   }
-
-  private get finalSource(): string {
-    return Object.keys( this.sources ).sort( traceKeySorter ).map( s => this.sources[s] )
-    .join( "" )
-  }
-
-  private clear(): FileSystemLoader {
-    this.tokensByFile = {};
-    return this;
-  }
 }
-
-// Sorts dependencies in the following way:
-// AAA comes before AA and A
-// AB comes after AA and before A
-// All Bs come after all As
-// This ensures that the files are always returned in the following order:
-// - In the order they were required, except
-// - After all their dependencies
-function traceKeySorter( a: string, b: string ): number {
-  if ( a.length < b.length ) {
-    return a < b.substring( 0, a.length ) ? -1 : 1
-  } else if ( a.length > b.length ) {
-    return a.substring( 0, b.length ) <= b ? -1 : 1
-  } else {
-    return a < b ? -1 : 1
-  }
-};
-
-type Dictionary<T> = {
-  [key: string]: T | undefined;
-};
