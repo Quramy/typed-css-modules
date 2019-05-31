@@ -39,12 +39,7 @@
     "@types/mkdirp": "^0.5.1",
     "@types/node": "^12.0.3",
     "@types/yargs": "^8.0.2",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-env": "^2.4.1",
-    "babel-jest": "^22.4.3",
     "jest": "^23.6.0",
-    "regenerator-runtime": "^0.11.1",
     "typescript": "^3.5.1"
   },
   "jest": {
