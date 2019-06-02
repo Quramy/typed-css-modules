@@ -2,7 +2,8 @@
   "name": "typed-css-modules",
   "version": "0.4.2",
   "description": "Creates .d.ts files from CSS Modules .css files",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc && chmod +x lib/cli.js",
     "test": "jest",
