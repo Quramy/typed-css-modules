@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 
-import path from 'path';
-import chokidar from 'chokidar';
+import * as path from 'path';
+import * as chokidar from 'chokidar';
 import glob from 'glob';
-import yargs from 'yargs';
+import * as yargs from 'yargs';
 import chalk from 'chalk';
 import {DtsCreator} from './dtsCreator';
 
 let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
-  .example('$0 src/styles')
-  .example('$0 src -o dist')
-  .example('$0 -p styles/**/*.icss -w')
+  .example('$0 src/styles', '')
+  .example('$0 src -o dist', '')
+  .example('$0 -p styles/**/*.icss -w', '')
   .detectLocale(false)
   .demand(['_'])
   .alias('c', 'camelCase').describe('c', 'Convert CSS class tokens to camelcase')
@@ -18,26 +18,21 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
-  .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" or warning messages').boolean('s')
+  .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" messages').boolean('s')
   .alias('h', 'help').help('h')
-  .version(() => require('../package.json').version)
+  .version(() => require('../package.json').version);
 let argv = yarg.argv;
-let creator;
+let creator: DtsCreator;
 
-function writeFile(f) {
-  creator.create(f, null, !!argv.w)
+function writeFile(f: string) {
+  creator.create(f, undefined, !!argv.w)
   .then(content => content.writeFile())
   .then(content => {
     if (!argv.s) {
       console.log('Wrote ' + chalk.green(content.outputFilePath));
-      if (content.messageList && content.messageList.length) {
-        content.messageList.forEach(message => {
-          console.warn(chalk.yellow('[Warn] ' + message));
-        });
-      }
     }
   })
-  .catch(reason => console.error(chalk.red('[Error] ' + reason)));
+  .catch((reason: unknown) => console.error(chalk.red('[Error] ' + reason)));
 };
 
 let main = () => {
@@ -66,7 +61,7 @@ let main = () => {
   });
 
   if(!argv.w) {
-    glob(filesPattern, null, (err, files) => {
+    glob(filesPattern, {}, (err, files) => {
       if(err) {
         console.error(err);
         return;

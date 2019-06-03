@@ -1,8 +1,9 @@
 /* this file is forked from https://raw.githubusercontent.com/css-modules/css-modules-loader-core/master/src/file-system-loader.js */
 
 import Core from 'css-modules-loader-core'
-import fs from 'fs'
-import path from 'path'
+import * as fs from 'fs'
+import * as path from 'path'
+import { Plugin } from "postcss";
 
 // Sorts dependencies in the following way:
 // AAA comes before AA and A
@@ -11,7 +12,7 @@ import path from 'path'
 // This ensures that the files are always returned in the following order:
 // - In the order they were required, except
 // - After all their dependencies
-const traceKeySorter = ( a, b ) => {
+const traceKeySorter = ( a: string, b: string ): number => {
   if ( a.length < b.length ) {
     return a < b.substring( 0, a.length ) ? -1 : 1
   } else if ( a.length > b.length ) {
@@ -21,8 +22,18 @@ const traceKeySorter = ( a, b ) => {
   }
 };
 
+export type Dictionary<T> = {
+  [key: string]: T | undefined;
+};
+
 export default class FileSystemLoader {
-  constructor( root, plugins ) {
+  private root: string;
+  private sources: Dictionary<string>;
+  private importNr: number;
+  private core: Core;
+  public tokensByFile: Dictionary<Core.ExportTokens>;
+
+  constructor( root: string, plugins?: Array<Plugin<any>> ) {
     this.root = root
     this.sources = {}
     this.importNr = 0
@@ -30,7 +41,7 @@ export default class FileSystemLoader {
     this.tokensByFile = {};
   }
 
-  fetch( _newPath, relativeTo, _trace, initialContents ) {
+  public fetch( _newPath: string, relativeTo: string, _trace?: string, initialContents?: string ): Promise<Core.ExportTokens> {
     let newPath = _newPath.replace( /^["']|["']$/g, "" ),
       trace = _trace || String.fromCharCode( this.importNr++ )
     return new Promise( ( resolve, reject ) => {
@@ -52,7 +63,7 @@ export default class FileSystemLoader {
 
         fs.readFile( fileRelativePath, "utf-8", ( err, source ) => {
           if ( err && relativeTo && relativeTo !== '/') {
-            resolve([]);
+            resolve({});
           }else if ( err && (!relativeTo || relativeTo === '/')) {
             reject(err);
           }else{
@@ -75,12 +86,12 @@ export default class FileSystemLoader {
     } )
   }
 
-  get finalSource() {
+  private get finalSource(): string {
     return Object.keys( this.sources ).sort( traceKeySorter ).map( s => this.sources[s] )
     .join( "" )
   }
 
-  clear() {
+  private clear(): FileSystemLoader {
     this.tokensByFile = {};
     return this;
   }

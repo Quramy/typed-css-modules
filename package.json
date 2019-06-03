@@ -2,9 +2,10 @@
   "name": "typed-css-modules",
   "version": "0.4.2",
   "description": "Creates .d.ts files from CSS Modules .css files",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "babel -d lib src",
+    "build": "tsc && chmod +x lib/cli.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --coverage",
@@ -24,7 +25,7 @@
   "author": "quramy",
   "license": "MIT",
   "dependencies": {
-    "camelcase": "^4.1.0",
+    "camelcase": "^5.3.1",
     "chalk": "^2.1.0",
     "chokidar": "^2.1.2",
     "css-modules-loader-core": "^1.1.0",
@@ -34,12 +35,13 @@
     "yargs": "^8.0.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-env": "^2.4.1",
-    "babel-jest": "^22.4.3",
+    "@types/css-modules-loader-core": "^1.1.0",
+    "@types/glob": "^7.1.1",
+    "@types/mkdirp": "^0.5.1",
+    "@types/node": "^12.0.3",
+    "@types/yargs": "^8.0.2",
     "jest": "^23.6.0",
-    "regenerator-runtime": "^0.11.1"
+    "typescript": "^3.5.1"
   },
   "jest": {
     "transform": {}
