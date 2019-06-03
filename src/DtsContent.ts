@@ -3,6 +3,9 @@ import * as os from "os";
 import * as path from "path";
 import isThere from "is-there";
 import * as mkdirp from 'mkdirp';
+import * as util from "util";
+
+const writeFile = util.promisify(fs.writeFile);
 
 
 interface DtsContentOptions {
@@ -65,20 +68,13 @@ export class DtsContent {
         return path.join(this.rootDir, this.searchDir, this.rInputPath);
     }
 
-    public writeFile(): Promise<DtsContent> {
+    public async writeFile(): Promise<void> {
         var outPathDir = path.dirname(this.outputFilePath);
         if(!isThere(outPathDir)) {
             mkdirp.sync(outPathDir);
         }
-        return new Promise((resolve, reject) => {
-            fs.writeFile(this.outputFilePath, this.formatted, 'utf8', (err) => {
-                if(err) {
-                    reject(err);
-                }else{
-                    resolve(this);
-                }
-            });
-        });
+
+        await writeFile(this.outputFilePath, this.formatted, 'utf8');
     }
 }
 
