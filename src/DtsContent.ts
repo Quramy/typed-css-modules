@@ -1,11 +1,8 @@
-import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import isThere from "is-there";
 import * as mkdirp from 'mkdirp';
-import * as util from "util";
-
-const writeFile = util.promisify(fs.writeFile);
+import {writeFile} from "./fs";
 
 
 interface DtsContentOptions {
@@ -74,7 +71,7 @@ export class DtsContent {
             mkdirp.sync(outPathDir);
         }
 
-        await writeFile(this.outputFilePath, this.formatted, 'utf8');
+        await writeFile(this.outputFilePath, this.formatted);
     }
 }
 

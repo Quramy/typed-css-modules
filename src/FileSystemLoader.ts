@@ -1,17 +1,14 @@
 /* this file is forked from https://raw.githubusercontent.com/css-modules/css-modules-loader-core/master/src/file-system-loader.js */
 
 import Core from 'css-modules-loader-core'
-import * as fs from 'fs'
 import * as path from 'path'
-import * as util from 'util'
 import { Plugin } from "postcss";
+import {readFile} from "./fs";
 
 
 type Dictionary<T> = {
   [key: string]: T | undefined;
 };
-
-const readFile = util.promisify(fs.readFile);
 
 
 export default class FileSystemLoader {
@@ -54,7 +51,7 @@ export default class FileSystemLoader {
       }
 
       try {
-        source = await readFile(fileRelativePath, "utf-8");
+        source = await readFile(fileRelativePath);
       }
       catch (error) {
         if (relativeTo && relativeTo !== '/') {
