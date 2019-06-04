@@ -30,11 +30,11 @@ export default class FileSystemLoader {
   }
 
   public async fetch(_newPath: string, relativeTo: string, _trace?: string, initialContents?: string): Promise<Core.ExportTokens> {
-    let newPath = _newPath.replace(/^["']|["']$/g, "");
-    let trace = _trace || String.fromCharCode(this.importNr++);
+    const newPath = _newPath.replace(/^["']|["']$/g, "");
+    const trace = _trace || String.fromCharCode(this.importNr++);
 
-    let relativeDir = path.dirname(relativeTo);
-    let rootRelativePath = path.resolve(relativeDir, newPath);
+    const relativeDir = path.dirname(relativeTo);
+    const rootRelativePath = path.resolve(relativeDir, newPath);
     let fileRelativePath = path.resolve(path.join(this.root, relativeDir), newPath);
 
     // if the path is not relative or absolute, try to resolve it in node_modules

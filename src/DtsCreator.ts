@@ -54,16 +54,16 @@ export class DtsCreator {
 
     const res = await this.loader.fetch(filePath, "/", undefined, initialContents);
     if(res) {
-      var tokens = res;
-      var keys = Object.keys(tokens);
+      const tokens = res;
+      const keys = Object.keys(tokens);
 
-      var convertKey = this.getConvertKeyMethod(this.camelCase);
+      const convertKey = this.getConvertKeyMethod(this.camelCase);
 
-      var result = keys
+      const result = keys
         .map(k => convertKey(k))
         .map(k => 'readonly "' + k + '": string;')
 
-      var content = new DtsContent({
+      const content = new DtsContent({
         dropExtension: this.dropExtension,
         rootDir: this.rootDir,
         searchDir: this.searchDir,

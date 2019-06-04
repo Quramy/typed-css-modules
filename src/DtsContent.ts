@@ -69,7 +69,7 @@ export class DtsContent {
     }
 
     public async writeFile(): Promise<void> {
-        var outPathDir = path.dirname(this.outputFilePath);
+        const outPathDir = path.dirname(this.outputFilePath);
         if(!isThere(outPathDir)) {
             mkdirp.sync(outPathDir);
         }
