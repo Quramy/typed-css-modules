@@ -6,7 +6,6 @@ env:
   - GIT_AUTHOR_EMAIL=yosuke.kurami@gmail.com
 language: node_js
 node_js:
-- 6
 - 8
 - 9
 before_script:

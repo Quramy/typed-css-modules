@@ -5,9 +5,10 @@ import * as chokidar from 'chokidar';
 import glob from 'glob';
 import * as yargs from 'yargs';
 import chalk from 'chalk';
-import {DtsCreator} from './dtsCreator';
+import {DtsCreator} from './DtsCreator';
+import {DtsContent} from "./DtsContent";
 
-let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
+const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
   .example('$0 src/styles', '')
   .example('$0 src -o dist', '')
   .example('$0 -p styles/**/*.icss -w', '')
@@ -21,22 +22,26 @@ let yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $
   .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" messages').boolean('s')
   .alias('h', 'help').help('h')
   .version(() => require('../package.json').version);
-let argv = yarg.argv;
+const argv = yarg.argv;
 let creator: DtsCreator;
 
-function writeFile(f: string) {
-  creator.create(f, undefined, !!argv.w)
-  .then(content => content.writeFile())
-  .then(content => {
+async function writeFile(f: string): Promise<void> {
+  try {
+    const content: DtsContent = await creator.create(f, undefined, !!argv.w);
+    await content.writeFile();
+
     if (!argv.s) {
       console.log('Wrote ' + chalk.green(content.outputFilePath));
     }
-  })
-  .catch((reason: unknown) => console.error(chalk.red('[Error] ' + reason)));
+  }
+  catch (error) {
+    console.error(chalk.red('[Error] ' + error));
+  }
 };
 
-let main = () => {
-  let rootDir, searchDir;
+function main() {
+  let rootDir: string;
+  let searchDir: string;
   if(argv.h) {
     yarg.showHelp();
     return;
@@ -50,7 +55,7 @@ let main = () => {
     yarg.showHelp();
     return;
   }
-  let filesPattern = path.join(searchDir, argv.p || '**/*.css');
+  const filesPattern = path.join(searchDir, argv.p || '**/*.css');
   rootDir = process.cwd();
   creator = new DtsCreator({
     rootDir,
@@ -72,7 +77,7 @@ let main = () => {
   } else {
     console.log('Watch ' + filesPattern + '...');
 
-    var watcher = chokidar.watch([filesPattern.replace(/\\/g, "/")]);
+    const watcher = chokidar.watch([filesPattern.replace(/\\/g, "/")]);
     watcher.on('add', writeFile);
     watcher.on('change', writeFile);
   }
