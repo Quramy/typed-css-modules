@@ -4,6 +4,7 @@ import * as os from 'os';
 import camelcase from "camelcase"
 import FileSystemLoader from './FileSystemLoader';
 import {DtsContent} from "./DtsContent";
+import {Plugin} from "postcss";
 
 
 type CamelCaseOption = boolean | 'dashes' | undefined;
@@ -15,6 +16,7 @@ interface DtsCreatorOptions {
   camelCase?: CamelCaseOption;
   dropExtension?: boolean;
   EOL?: string;
+  loaderPlugins?: Plugin<any>[];
 }
 
 export class DtsCreator {
@@ -33,7 +35,7 @@ export class DtsCreator {
     this.rootDir = options.rootDir || process.cwd();
     this.searchDir = options.searchDir || '';
     this.outDir = options.outDir || this.searchDir;
-    this.loader = new FileSystemLoader(this.rootDir);
+    this.loader = new FileSystemLoader(this.rootDir, options.loaderPlugins);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
     this.camelCase = options.camelCase;
