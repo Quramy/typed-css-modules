@@ -5,8 +5,8 @@ import * as chokidar from 'chokidar';
 import glob from 'glob';
 import * as yargs from 'yargs';
 import chalk from 'chalk';
-import {DtsCreator} from './DtsCreator';
-import {DtsContent} from "./DtsContent";
+import {DtsCreator} from './dts-creator';
+import {DtsContent} from "./dts-content";
 
 const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
   .example('$0 src/styles', '')
