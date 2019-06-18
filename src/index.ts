@@ -1,2 +1,2 @@
-import { DtsCreator } from './DtsCreator';
+import { DtsCreator } from './dts-creator';
 export = DtsCreator;

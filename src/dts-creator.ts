@@ -2,8 +2,8 @@ import * as process from 'process';
 import * as path from'path';
 import * as os from 'os';
 import camelcase from "camelcase"
-import FileSystemLoader from './FileSystemLoader';
-import {DtsContent} from "./DtsContent";
+import FileSystemLoader from './file-system-loader';
+import {DtsContent} from "./dts-content";
 import {Plugin} from "postcss";
 
 
