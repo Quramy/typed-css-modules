@@ -1,55 +1,36 @@
 #!/usr/bin/env node
 
-import * as path from 'path';
-import * as chokidar from 'chokidar';
-import _glob from 'glob';
 import * as yargs from 'yargs';
-import chalk from 'chalk';
-import {DtsCreator} from './dts-creator';
-import {DtsContent} from "./dts-content";
-import * as util from "util";
+import {run} from "./run";
 
-const glob = util.promisify(_glob);
 
-const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
+const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <search directory>')
   .example('$0 src/styles', '')
   .example('$0 src -o dist', '')
   .example('$0 -p styles/**/*.icss -w', '')
   .detectLocale(false)
   .demand(['_'])
-  .alias('c', 'camelCase').describe('c', 'Convert CSS class tokens to camelcase')
-  .alias('o', 'outDir').describe('o', 'Output directory')
   .alias('p', 'pattern').describe('p', 'Glob pattern with css files')
+  .alias('o', 'outDir').describe('o', 'Output directory')
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
+  .alias('c', 'camelCase').describe('c', 'Convert CSS class tokens to camelcase')
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
   .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" messages').boolean('s')
   .alias('h', 'help').help('h')
   .version(() => require('../package.json').version);
-const argv = yarg.argv;
-let creator: DtsCreator;
 
-async function writeFile(f: string): Promise<void> {
-  try {
-    const content: DtsContent = await creator.create(f, undefined, !!argv.w);
-    await content.writeFile();
 
-    if (!argv.s) {
-      console.log('Wrote ' + chalk.green(content.outputFilePath));
-    }
-  }
-  catch (error) {
-    console.error(chalk.red('[Error] ' + error));
-  }
-};
+main();
 
-async function main() {
-  let rootDir: string;
-  let searchDir: string;
+async function main(): Promise<void> {
+  const argv = yarg.argv;
+
   if(argv.h) {
     yarg.showHelp();
     return;
   }
 
+  let searchDir: string;
   if(argv._ && argv._[0]) {
     searchDir = argv._[0];
   }else if(argv.p) {
@@ -58,26 +39,13 @@ async function main() {
     yarg.showHelp();
     return;
   }
-  const filesPattern = path.join(searchDir, argv.p || '**/*.css');
-  rootDir = process.cwd();
-  creator = new DtsCreator({
-    rootDir,
-    searchDir,
+
+  await run(searchDir, {
+    pattern: argv.p,
     outDir: argv.o,
+    watch: argv.w,
     camelCase: argv.c,
-    dropExtension: argv.d
+    dropExtension: argv.d,
+    silent: argv.s
   });
-
-  if(!argv.w) {
-    const files = await glob(filesPattern);
-    files.forEach(writeFile);
-  } else {
-    console.log('Watch ' + filesPattern + '...');
-
-    const watcher = chokidar.watch([filesPattern.replace(/\\/g, "/")]);
-    watcher.on('add', writeFile);
-    watcher.on('change', writeFile);
-  }
 };
-
-main();
