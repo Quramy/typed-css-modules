@@ -1,2 +1,10 @@
-src/
-gulpfile.js
+# ignore everything
+*
+
+# include these:
+!/lib/**/*
+!LICENSE.md
+!README.md
+
+# exclude hidden files from the includes:
+.*
