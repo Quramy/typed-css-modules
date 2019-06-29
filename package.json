@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "clean": "rm -rf lib/",
-    "build": "yarn clean && tsc && chmod +x lib/cli.js",
+    "clean": "rimraf lib/",
+    "build": "npm run clean && tsc && chmod +x lib/cli.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --coverage",
