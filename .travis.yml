@@ -16,8 +16,7 @@ script:
 deploy:
   provider: npm
   email: yosuke.kurami@gmail.com
-  api_key:
-    secure: LdR3rqUci++5+/8eBDFQhpvt2RFdnHKbPaUVHatYHbw4cnFFvUN2tdTTIpMPzlXL5Pt1FY3nmUQHj1OUn23EVVixSuh4KSvoIt15m1w15tn7Y8l7+zZfvlWONapIU+cMrhffPfIiiAUWXVOLaj5fGQk9hkbEirPRhLOeoytVgVj01QrAb/fmo3pmaybZkbBnJPfeKMBcmEzpW8bq33hRz06jLPmCCCyqUK2JvJqOmfkItzq7aRhwslgiKa67yx+3wXgpgqrGM49dlK3RIoivW/o3fI70dqYWvgt5AsgC5/hniAmeJnp0NfLi6+x/MkMca/HBzSlVeyz0nUR8qQAc6J/uo8xfDEhTB6MT2OKcvUCgw82bCEp6r7U1yZpCs+trycjV0DleKm1XE8JWeMCGJOlSYMUrRvCfqASFl3LY2zTGltA7RDVUOE302e86YPofJWA/38AUaSRgL5sHAT95MdaFW1A+PdcWef9xFqGY6DFISESk8kFUASFuqwPvYso3d+WRNCmTY2uDlvpLXFtgk20s9KSs2IteIA6SwyiV0ZV2rcftgDoEIl5jqSORAtMiZ+CPOLCqQwU0XLAnNtKdQ1F6HFzUhuLUJ+mZZH8WI8Meae/vDWTSx0JJclkLKrepPXXRvNlWty8D18pDZdX0/9xgDlG/H12qva59I1HOYgo=
+  api_key: $NPM_AUTH_TOKEN
   on:
     tags: true
     repo: Quramy/typed-css-modules
