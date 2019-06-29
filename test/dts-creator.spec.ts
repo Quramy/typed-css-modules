@@ -1,9 +1,10 @@
 'use strict';
 
-var path = require('path');
-var assert = require('assert');
-var DtsCreator = require('../lib/dts-creator').DtsCreator;
-var os = require('os');
+import * as path from 'path';
+
+import * as assert from 'assert';
+import * as os from 'os';
+import { DtsCreator } from '../src/dts-creator';
 
 describe('DtsCreator', () => {
   var creator = new DtsCreator();

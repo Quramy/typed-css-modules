@@ -3,12 +3,13 @@
     "module": "commonjs",
     "target": "es2015",
     "declaration": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "strict": true,
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "outDir": "lib"
+    "outDir": "lib",
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.ts"
