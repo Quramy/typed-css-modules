@@ -2,11 +2,14 @@
 
 import * as path from 'path';
 import * as chokidar from 'chokidar';
-import glob from 'glob';
+import _glob from 'glob';
 import * as yargs from 'yargs';
 import chalk from 'chalk';
 import {DtsCreator} from './dts-creator';
 import {DtsContent} from "./dts-content";
+import * as util from "util";
+
+const glob = util.promisify(_glob);
 
 const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <input directory>')
   .example('$0 src/styles', '')
@@ -39,7 +42,7 @@ async function writeFile(f: string): Promise<void> {
   }
 };
 
-function main() {
+async function main() {
   let rootDir: string;
   let searchDir: string;
   if(argv.h) {
@@ -66,14 +69,8 @@ function main() {
   });
 
   if(!argv.w) {
-    glob(filesPattern, {}, (err, files) => {
-      if(err) {
-        console.error(err);
-        return;
-      }
-      if(!files || !files.length) return;
-      files.forEach(writeFile);
-    });
+    const files = await glob(filesPattern);
+    files.forEach(writeFile);
   } else {
     console.log('Watch ' + filesPattern + '...');
 
