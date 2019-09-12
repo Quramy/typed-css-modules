@@ -17,7 +17,7 @@ const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage:
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
   .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" messages').boolean('s')
   .alias('h', 'help').help('h')
-  .version(() => require('../package.json').version);
+  .version(require('../package.json').version);
 
 
 main();
