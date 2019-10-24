@@ -143,10 +143,18 @@ Returns `DtsContent` instance.
 ### class DtsContent
 DtsContent instance has `*.d.ts` content, final output path, and function to write file.
 
-#### `writeFile() => Promise(dtsContent)`
-Writes the DtsContent instance's content to a file.
+#### `writeFile(postprocessor) => Promise(dtsContent)`
+Writes the DtsContent instance's content to a file. Returns the DtsContent instance.
 
-* `dtsContent`: the DtsContent instance itself.
+* `postprocessor` (optional): a function that takes the formatted definition string and returns a modified string that will be the final content written to the file.
+
+  You could use this, for example, to pass generated definitions through a formatter like Prettier, or to add a comment to the top of generated files:
+
+  ```js
+  dtsContent.writeFile(
+    definition => `// Generated automatically, do not edit\n${definition}`
+  )
+  ```
 
 #### `tokens`
 An array of tokens retrieved from input CSS file.
