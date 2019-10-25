@@ -68,13 +68,15 @@ export class DtsContent {
         return path.join(this.rootDir, this.searchDir, this.rInputPath);
     }
 
-    public async writeFile(): Promise<void> {
+    public async writeFile(postprocessor = (formatted: string) => formatted): Promise<void> {
+        const finalOutput = postprocessor(this.formatted);
+
         const outPathDir = path.dirname(this.outputFilePath);
         if(!isThere(outPathDir)) {
             mkdirp.sync(outPathDir);
         }
 
-        await writeFile(this.outputFilePath, this.formatted, 'utf8');
+        await writeFile(this.outputFilePath, finalOutput, 'utf8');
     }
 }
 

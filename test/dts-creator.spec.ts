@@ -180,6 +180,19 @@ export = styles;
   });
 
   describe('#writeFile', () => {
+    it('accepts a postprocessor function', done => {
+      new DtsCreator()
+        .create('test/testStyle.css')
+        .then(content => {
+          return content.writeFile(
+            formatted => `// this banner was added to the .d.ts file automatically.\n${formatted}`
+          );
+        })
+        .then(() => {
+          done();
+        });
+    });
+
     it('writes a file', done => {
       new DtsCreator()
         .create('test/testStyle.css')
