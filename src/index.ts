@@ -1,2 +1,2 @@
-export {DtsCreator as default} from './dts-creator';
-export {run} from './run';
+export { DtsCreator as default } from './dts-creator';
+export { run } from './run';

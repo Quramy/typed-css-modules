@@ -1,19 +1,19 @@
 import * as process from 'process';
-import * as path from'path';
+import * as path from 'path';
 import * as os from 'os';
-import camelcase from "camelcase"
+import camelcase from 'camelcase';
 import FileSystemLoader from './file-system-loader';
-import {DtsContent} from "./dts-content";
-import {Plugin} from "postcss";
+import { DtsContent } from './dts-content';
+import { Plugin } from 'postcss';
 
-
-type CamelCaseOption = boolean | 'dashes' | undefined;
+type CamelCaseOption = boolean | 'dashes' | undefined;
 
 interface DtsCreatorOptions {
   rootDir?: string;
   searchDir?: string;
   outDir?: string;
   camelCase?: CamelCaseOption;
+  singleQuote?: boolean;
   dropExtension?: boolean;
   EOL?: string;
   loaderPlugins?: Plugin<any>[];
@@ -26,36 +26,50 @@ export class DtsCreator {
   private loader: FileSystemLoader;
   private inputDirectory: string;
   private outputDirectory: string;
-  private camelCase: boolean | 'dashes' | undefined;
+  private singleQuote?: boolean;
+  private camelCase: boolean | 'dashes' | undefined;
   private dropExtension: boolean;
   private EOL: string;
 
   constructor(options?: DtsCreatorOptions) {
-    if(!options) options = {};
+    if (!options) options = {};
     this.rootDir = options.rootDir || process.cwd();
     this.searchDir = options.searchDir || '';
     this.outDir = options.outDir || this.searchDir;
     this.loader = new FileSystemLoader(this.rootDir, options.loaderPlugins);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
+    this.singleQuote = options.singleQuote;
     this.camelCase = options.camelCase;
     this.dropExtension = !!options.dropExtension;
     this.EOL = options.EOL || os.EOL;
   }
 
-  public async create(filePath: string, initialContents?: string, clearCache: boolean = false): Promise<DtsContent> {
+  public async create(
+    filePath: string,
+    initialContents?: string,
+    clearCache: boolean = false
+  ): Promise<DtsContent> {
     let rInputPath: string;
-    if(path.isAbsolute(filePath)) {
+    if (path.isAbsolute(filePath)) {
       rInputPath = path.relative(this.inputDirectory, filePath);
-    }else{
-      rInputPath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
+    } else {
+      rInputPath = path.relative(
+        this.inputDirectory,
+        path.join(process.cwd(), filePath)
+      );
     }
-    if(clearCache) {
+    if (clearCache) {
       this.loader.tokensByFile = {};
     }
 
-    const res = await this.loader.fetch(filePath, "/", undefined, initialContents);
-    if(res) {
+    const res = await this.loader.fetch(
+      filePath,
+      '/',
+      undefined,
+      initialContents
+    );
+    if (res) {
       const tokens = res;
       const keys = Object.keys(tokens);
 
@@ -63,10 +77,11 @@ export class DtsCreator {
 
       const result = keys
         .map(k => convertKey(k))
-        .map(k => 'readonly "' + k + '": string;')
+        .map(k => `readonly ${k.includes('-') ? `"${k}"` : k}: string;`);
 
       const content = new DtsContent({
         dropExtension: this.dropExtension,
+        singleQuote: this.singleQuote,
         rootDir: this.rootDir,
         searchDir: this.searchDir,
         outDir: this.outDir,
@@ -77,19 +92,21 @@ export class DtsCreator {
       });
 
       return content;
-    }else{
+    } else {
       throw res;
     }
   }
 
-  private getConvertKeyMethod(camelCaseOption: CamelCaseOption): (str: string) => string {
+  private getConvertKeyMethod(
+    camelCaseOption: CamelCaseOption
+  ): (str: string) => string {
     switch (camelCaseOption) {
       case true:
         return camelcase;
       case 'dashes':
         return this.dashesCamelCase;
       default:
-        return (key) => key;
+        return key => key;
     }
   }
 
@@ -104,6 +121,4 @@ export class DtsCreator {
       return firstLetter.toUpperCase();
     });
   }
-
-
 }

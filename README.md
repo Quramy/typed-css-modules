@@ -106,6 +106,10 @@ export const SomeComponent: string;
 
 See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camelcase).
 
+#### Use single quotes to class names in the .d.ts files
+
+With `-sq` or `--singleQuote`, you can configure what quote to use. Useful when tools like prettier format your .d.ts files.
+
 ## API
 
 ```sh
@@ -132,6 +136,7 @@ You can set the following options:
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
 * `option.camelCase`: Camelize CSS class tokens.
+* `option.singleQuote`: Use single quotes on dashed keys.
 * `option.EOL`: EOL (end of line) for the generated `d.ts` files. Possible values `'\n'` or `'\r\n'`(default: `os.EOL`).
 
 #### `create(filepath, contents) => Promise(dtsContent)`
