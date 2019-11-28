@@ -63,7 +63,8 @@ export class DtsCreator {
 
       const result = keys
         .map(k => convertKey(k))
-        .map(k => 'readonly "' + k + '": string;')
+        .map(k => 'readonly \'' + k + '\': string;')
+      result.sort();
 
       const content = new DtsContent({
         dropExtension: this.dropExtension,
