@@ -17,6 +17,7 @@ const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage:
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
   .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" messages').boolean('s')
   .alias('h', 'help').help('h')
+  .alias('e', 'extension').describe('s', 'Use this extension, instead of \'.d.ts\'')
   .version(require('../package.json').version);
 
 
@@ -46,6 +47,7 @@ async function main(): Promise<void> {
     watch: argv.w,
     camelCase: argv.c,
     dropExtension: argv.d,
-    silent: argv.s
+    silent: argv.s,
+    extension:argv.e
   });
 };
