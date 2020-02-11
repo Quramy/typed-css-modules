@@ -25,7 +25,9 @@ export default class FileSystemLoader {
     this.root = root;
     this.sources = {};
     this.importNr = 0;
-    this.core = new Core(plugins);
+
+    //@ts-ignore
+    this.core = new Core(plugins );
     this.tokensByFile = {};
   }
 
