@@ -1,8 +1,8 @@
 import * as fs from "fs";
-import * as os from "os";
-import * as path from "path";
 import isThere from "is-there";
 import * as mkdirp from 'mkdirp';
+import * as os from "os";
+import * as path from "path";
 import * as util from "util";
 
 const writeFile = util.promisify(fs.writeFile);
@@ -10,6 +10,7 @@ const writeFile = util.promisify(fs.writeFile);
 
 interface DtsContentOptions {
     dropExtension: boolean;
+    extension: string;
     rootDir: string;
     searchDir: string;
     outDir: string;
@@ -28,6 +29,7 @@ export class DtsContent {
     private rawTokenList: string[];
     private resultList: string[];
     private EOL: string;
+    private extension: string;
 
     constructor(options: DtsContentOptions) {
         this.dropExtension = options.dropExtension;
@@ -38,6 +40,7 @@ export class DtsContent {
         this.rawTokenList = options.rawTokenList;
         this.resultList = options.resultList;
         this.EOL = options.EOL;
+        this.extension = options.extension;
     }
 
     public get contents(): string[] {
@@ -45,7 +48,7 @@ export class DtsContent {
     }
 
     public get formatted(): string {
-        if(!this.resultList || !this.resultList.length) return '';
+        if (!this.resultList || !this.resultList.length) return '';
         return [
             'declare const styles: {',
             ...this.resultList.map(line => '  ' + line),
@@ -61,7 +64,7 @@ export class DtsContent {
 
     public get outputFilePath(): string {
         const outputFileName = this.dropExtension ? removeExtension(this.rInputPath) : this.rInputPath;
-        return path.join(this.rootDir, this.outDir, outputFileName + '.d.ts');
+        return path.join(this.rootDir, this.outDir, outputFileName + this.extension);
     }
 
     public get inputFilePath(): string {
@@ -72,7 +75,7 @@ export class DtsContent {
         const finalOutput = postprocessor(this.formatted);
 
         const outPathDir = path.dirname(this.outputFilePath);
-        if(!isThere(outPathDir)) {
+        if (!isThere(outPathDir)) {
             mkdirp.sync(outPathDir);
         }
 

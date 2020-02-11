@@ -17,6 +17,7 @@ interface DtsCreatorOptions {
   dropExtension?: boolean;
   EOL?: string;
   loaderPlugins?: Plugin<any>[];
+  extension?:string;
 }
 
 export class DtsCreator {
@@ -29,6 +30,7 @@ export class DtsCreator {
   private camelCase: boolean | 'dashes' | undefined;
   private dropExtension: boolean;
   private EOL: string;
+  private extension:string;
 
   constructor(options?: DtsCreatorOptions) {
     if(!options) options = {};
@@ -40,6 +42,7 @@ export class DtsCreator {
     this.outputDirectory = path.join(this.rootDir, this.outDir);
     this.camelCase = options.camelCase;
     this.dropExtension = !!options.dropExtension;
+    this.extension = options.extension || '.d.ts';
     this.EOL = options.EOL || os.EOL;
   }
 
@@ -67,6 +70,7 @@ export class DtsCreator {
 
       const content = new DtsContent({
         dropExtension: this.dropExtension,
+        extension:this.extension,
         rootDir: this.rootDir,
         searchDir: this.searchDir,
         outDir: this.outDir,

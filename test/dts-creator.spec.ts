@@ -3,7 +3,6 @@
 import * as path from 'path';
 
 import * as assert from 'assert';
-import * as os from 'os';
 import { DtsCreator } from '../src/dts-creator';
 
 describe('DtsCreator', () => {
@@ -95,6 +94,18 @@ describe('DtsContent', () => {
         assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize("test/testStyle.d.ts"));
         done();
       });
+    });
+    it('can change the extension when asked', done => {
+          new DtsCreator({extension: '.what.ts'}).create(path.normalize('test/testStyle.css')).then(content => {
+              assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize("test/testStyle.css.what.ts"));
+              done();
+          });
+    });
+    it('can change the drop and change extension when asked', done => {
+          new DtsCreator({dropExtension:true, extension: '.what.ts'}).create(path.normalize('test/testStyle.css')).then(content => {
+              assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize("test/testStyle.what.ts"));
+              done();
+          });
     });
   });
 
