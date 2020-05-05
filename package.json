@@ -32,22 +32,22 @@
     "@types/css-modules-loader-core": "^1.1.0",
     "camelcase": "^5.3.1",
     "chalk": "^2.1.0",
-    "chokidar": "^2.1.2",
+    "chokidar": "^3.4.0",
     "css-modules-loader-core": "^1.1.0",
     "glob": "^7.1.2",
     "is-there": "^4.4.2",
     "mkdirp": "^0.5.1",
-    "yargs": "^12.0.5"
+    "yargs": "^15.3.1"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
-    "@types/jest": "^24.0.15",
+    "@types/jest": "^25.2.1",
     "@types/mkdirp": "^0.5.1",
     "@types/node": "^12.0.8",
-    "@types/yargs": "^8.0.2",
-    "jest": "^24.8.0",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.5.1"
+    "@types/yargs": "^15.0.4",
+    "jest": "^25.5.4",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3"
   },
   "jest": {
     "transform": {
