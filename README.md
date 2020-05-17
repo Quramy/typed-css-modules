@@ -77,9 +77,10 @@ tcm -o dist src
 
 By the default, this tool searches `**/*.css` files under `<input directory>`.
 If you can customize glob pattern, you can use `--pattern` or `-p` option.
+Note the quotes around the glob to `-p` (they are required, so that your shell does not perform the expansion).
 
 ```sh
-tcm -p src/**/*.icss
+tcm -p 'src/**/*.icss' .
 ```
 
 #### watch
