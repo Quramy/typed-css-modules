@@ -1,5 +1,5 @@
-declare const styles: {
+declare const TestStyle: {
   readonly "myClass": string;
 };
-export = styles;
+export default TestStyle;
 
