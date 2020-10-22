@@ -6,7 +6,7 @@ import * as mkdirp from 'mkdirp';
 import * as util from "util";
 
 const writeFile = util.promisify(fs.writeFile);
-
+const readFile = util.promisify(fs.readFile);
 
 interface DtsContentOptions {
     dropExtension: boolean;
@@ -76,7 +76,21 @@ export class DtsContent {
             mkdirp.sync(outPathDir);
         }
 
-        await writeFile(this.outputFilePath, finalOutput, 'utf8');
+        let isDirty = false;
+
+        if(!isThere(this.outputFilePath)) {
+            isDirty = true;
+        } else {
+            const content = (await readFile(this.outputFilePath)).toString();
+
+            if(content !== finalOutput) {
+                isDirty = true;
+            }
+        }
+
+        if(isDirty) {
+            await writeFile(this.outputFilePath, finalOutput, 'utf8');
+        }
     }
 }
 
