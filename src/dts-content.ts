@@ -4,6 +4,7 @@ import * as path from "path";
 import isThere from "is-there";
 import * as mkdirp from 'mkdirp';
 import * as util from "util";
+import camelcase from "camelcase";
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -46,11 +47,12 @@ export class DtsContent {
 
     public get formatted(): string {
         if(!this.resultList || !this.resultList.length) return '';
+        const exportName = this.buildExportName();
         return [
-            'declare const styles: {',
+            `declare const ${exportName}: {`,
             ...this.resultList.map(line => '  ' + line),
             '};',
-            'export = styles;',
+            `export default ${exportName};`,
             ''
         ].join(os.EOL) + this.EOL;
     }
@@ -91,6 +93,16 @@ export class DtsContent {
         if(isDirty) {
             await writeFile(this.outputFilePath, finalOutput, 'utf8');
         }
+    }
+
+    private buildExportName() {
+        const outputFileNameParts = removeExtension(this.rInputPath).split('/');
+        const outputStyleName = camelcase(
+            outputFileNameParts[outputFileNameParts.length - 1]
+        );
+        return `${outputStyleName.charAt(0).toUpperCase()}${outputStyleName.slice(
+            1
+        )}`;
     }
 }
 

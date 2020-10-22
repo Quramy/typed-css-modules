@@ -104,10 +104,10 @@ describe('DtsContent', () => {
         assert.equal(
           content.formatted,
           `\
-declare const styles: {
+declare const TestStyle: {
   readonly "myClass": string;
 };
-export = styles;
+export default TestStyle;
 
 `
         );
@@ -130,10 +130,10 @@ export = styles;
             assert.equal(
               content.formatted,
               `\
-declare const styles: {
+declare const Kebabed: {
   readonly "myClass": string;
 };
-export = styles;
+export default Kebabed;
 
 `
             );
@@ -148,10 +148,10 @@ export = styles;
             assert.equal(
               content.formatted,
               `\
-declare const styles: {
+declare const KebabedUpperCase: {
   readonly "myClass": string;
 };
-export = styles;
+export default KebabedUpperCase;
 
 `
             );
@@ -166,10 +166,10 @@ export = styles;
             assert.equal(
               content.formatted,
               `\
-declare const styles: {
+declare const KebabedUpperCase: {
   readonly "MyClass": string;
 };
-export = styles;
+export default KebabedUpperCase;
 
 `
             );
