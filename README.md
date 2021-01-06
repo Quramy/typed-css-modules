@@ -29,7 +29,7 @@ So, you can import CSS modules' class or variable into your TypeScript sources:
 
 ```ts
 /* app.ts */
-import * as styles from './styles.css';
+import styles from './styles.css';
 console.log(`<div class="${styles.myClass}"></div>`);
 console.log(`<div style="color: ${styles.primary}"></div>`);
 ```
@@ -102,10 +102,44 @@ webpack `css-loader`. This will keep upperCase class names intact, e.g.:
 becomes
 
 ```typescript
-export const SomeComponent: string;
+declare const styles: {
+  readonly "SomeComponent": string;
+};
+export = styles;
 ```
 
 See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camelcase).
+
+#### named exports (enable tree shaking)
+With `-e` or `--namedExports`, types are exported as named exports as opposed to default exports.
+This enables support for the `namedExports` css-loader feature, required for webpack to tree shake the final CSS (learn more [here](https://webpack.js.org/loaders/css-loader/#namedexport)).
+
+Use this option in combination with https://webpack.js.org/loaders/css-loader/#namedexport and https://webpack.js.org/loaders/style-loader/#namedexport (if you use `style-loader`).
+
+When this option is enabled, the type definition changes to support named exports.
+
+*NOTE: this option enables camelcase by default.*
+
+```css
+.SomeComponent {
+  height: 10px;
+}
+```
+
+**Standard output:**
+
+```typescript
+declare const styles: {
+  readonly "SomeComponent": string;
+};
+export = styles;
+```
+
+**Named exports output:**
+
+```typescript
+export const someComponent: string;
+```
 
 ## API
 
@@ -133,6 +167,7 @@ You can set the following options:
 * `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 * `option.outDir`: Output directory(default: `option.searchDir`).
 * `option.camelCase`: Camelize CSS class tokens.
+* `option.namedExports`: Use named exports as opposed to default exports to enable tree shaking. Requires `import * as style from './file.module.css';` (default: `false`)
 * `option.EOL`: EOL (end of line) for the generated `d.ts` files. Possible values `'\n'` or `'\r\n'`(default: `os.EOL`).
 
 #### `create(filepath, contents) => Promise(dtsContent)`
@@ -182,7 +217,7 @@ e.g. `['my-class is not valid TypeScript variable name.']`.
 Final output file path.
 
 ## Remarks
-If your input CSS file has the followng class names, these invalid tokens are not written to output `.d.ts` file.
+If your input CSS file has the following class names, these invalid tokens are not written to output `.d.ts` file.
 
 ```css
 /* TypeScript reserved word */
