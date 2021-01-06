@@ -115,6 +115,32 @@ export = styles;
       });
     });
 
+    it('returns named exports formatted .d.ts string', done => {
+      new DtsCreator({ namedExports: true }).create('test/testStyle.css').then(content => {
+        assert.equal(
+          content.formatted,
+          `\
+export const myClass: string;
+
+`
+        );
+        done();
+      });
+    });
+
+    it('returns camelcase names when using named exports as formatted .d.ts string', done => {
+      new DtsCreator({ namedExports: true }).create('test/kebabedUpperCase.css').then(content => {
+        assert.equal(
+          content.formatted,
+          `\
+export const myClass: string;
+
+`
+        );
+        done();
+      });
+    });
+
     it('returns empty object exportion when the result list has no items', done => {
       new DtsCreator().create('test/empty.css').then(content => {
         assert.equal(content.formatted, '');

@@ -14,6 +14,7 @@ const yarg = yargs.usage('Create .css.d.ts from CSS modules *.css files.\nUsage:
   .alias('o', 'outDir').describe('o', 'Output directory').string("o")
   .alias('w', 'watch').describe('w', 'Watch input directory\'s css files or pattern').boolean('w')
   .alias('c', 'camelCase').describe('c', 'Convert CSS class tokens to camelcase').boolean("c")
+  .alias('e', 'namedExports').describe('e', 'Use named exports as opposed to default exports to enable tree shaking.').boolean("e")
   .alias('d', 'dropExtension').describe('d', 'Drop the input files extension').boolean('d')
   .alias('s', 'silent').describe('s', 'Silent output. Do not show "files written" messages').boolean('s')
   .alias('h', 'help').help('h')
@@ -45,6 +46,7 @@ async function main(): Promise<void> {
     outDir: argv.o,
     watch: argv.w,
     camelCase: argv.c,
+    namedExports: argv.e,
     dropExtension: argv.d,
     silent: argv.s
   });
