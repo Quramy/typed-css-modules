@@ -1,4 +1,4 @@
-# typed-css-modules ![github actions](https://github.com/Quramy/typed-css-modules/workflows/build/badge.svg)](https://github.com/Quramy/typed-css-modules/actions) [![npm version](https://badge.fury.io/js/typed-css-modules.svg)](http://badge.fury.io/js/typed-css-modules)
+# typed-css-modules [![github actions](https://github.com/Quramy/typed-css-modules/workflows/build/badge.svg)](https://github.com/Quramy/typed-css-modules/actions) [![npm version](https://badge.fury.io/js/typed-css-modules.svg)](http://badge.fury.io/js/typed-css-modules)
 
 Creates TypeScript definition files from [CSS Modules](https://github.com/css-modules/css-modules) .css files.
 
