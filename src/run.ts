@@ -14,6 +14,7 @@ interface RunOptions {
     outDir?: string;
     watch?: boolean;
     camelCase?: boolean;
+    namedExports?: boolean;
     dropExtension?: boolean;
     silent?: boolean;
 }
@@ -26,6 +27,7 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
         searchDir,
         outDir: options.outDir,
         camelCase: options.camelCase,
+        namedExports: options.namedExports,
         dropExtension: options.dropExtension,
     });
 

@@ -1,19 +1,17 @@
 import * as process from 'process';
 import * as path from'path';
 import * as os from 'os';
-import camelcase from "camelcase"
 import FileSystemLoader from './file-system-loader';
-import {DtsContent} from "./dts-content";
+import {DtsContent, CamelCaseOption} from "./dts-content";
 import {Plugin} from "postcss";
 
-
-type CamelCaseOption = boolean | 'dashes' | undefined;
 
 interface DtsCreatorOptions {
   rootDir?: string;
   searchDir?: string;
   outDir?: string;
   camelCase?: CamelCaseOption;
+  namedExports?: boolean;
   dropExtension?: boolean;
   EOL?: string;
   loaderPlugins?: Plugin<any>[];
@@ -26,7 +24,8 @@ export class DtsCreator {
   private loader: FileSystemLoader;
   private inputDirectory: string;
   private outputDirectory: string;
-  private camelCase: boolean | 'dashes' | undefined;
+  private camelCase: CamelCaseOption;
+  private namedExports: boolean;
   private dropExtension: boolean;
   private EOL: string;
 
@@ -39,6 +38,7 @@ export class DtsCreator {
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
     this.outputDirectory = path.join(this.rootDir, this.outDir);
     this.camelCase = options.camelCase;
+    this.namedExports = !!options.namedExports;
     this.dropExtension = !!options.dropExtension;
     this.EOL = options.EOL || os.EOL;
   }
@@ -59,12 +59,6 @@ export class DtsCreator {
       const tokens = res;
       const keys = Object.keys(tokens);
 
-      const convertKey = this.getConvertKeyMethod(this.camelCase);
-
-      const result = keys
-        .map(k => convertKey(k))
-        .map(k => 'readonly "' + k + '": string;')
-
       const content = new DtsContent({
         dropExtension: this.dropExtension,
         rootDir: this.rootDir,
@@ -72,7 +66,8 @@ export class DtsCreator {
         outDir: this.outDir,
         rInputPath,
         rawTokenList: keys,
-        resultList: result,
+        namedExports: this.namedExports,
+        camelCase: this.camelCase,
         EOL: this.EOL
       });
 
@@ -81,29 +76,4 @@ export class DtsCreator {
       throw res;
     }
   }
-
-  private getConvertKeyMethod(camelCaseOption: CamelCaseOption): (str: string) => string {
-    switch (camelCaseOption) {
-      case true:
-        return camelcase;
-      case 'dashes':
-        return this.dashesCamelCase;
-      default:
-        return (key) => key;
-    }
-  }
-
-  /**
-   * Replaces only the dashes and leaves the rest as-is.
-   *
-   * Mirrors the behaviour of the css-loader:
-   * https://github.com/webpack-contrib/css-loader/blob/1fee60147b9dba9480c9385e0f4e581928ab9af9/lib/compile-exports.js#L3-L7
-   */
-  private dashesCamelCase(str: string): string {
-    return str.replace(/-+(\w)/g, function(match, firstLetter) {
-      return firstLetter.toUpperCase();
-    });
-  }
-
-
 }
