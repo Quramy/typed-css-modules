@@ -68,8 +68,25 @@ export default class FileSystemLoader {
     }
 
     const { injectableSource, exportTokens } = await this.core.load(source, rootRelativePath, trace, this.fetch.bind(this));
+
+    const re = new RegExp(/@import\s'(\D+?.css)';/, 'gm');
+
+    let importTokens: Core.ExportTokens = {};
+
+    let result;
+
+    while (result = re.exec(injectableSource)) {
+      const importFile = result?.[1];
+
+      if  (importFile)  {
+        const localTokens = await this.fetch(importFile, rootRelativePath, undefined, initialContents);
+
+        Object.assign(importTokens, localTokens);
+      }
+    }
+
     this.sources[trace] = injectableSource;
     this.tokensByFile[fileRelativePath] = exportTokens;
-    return exportTokens;
+    return {...exportTokens, ...importTokens};
   }
 }
