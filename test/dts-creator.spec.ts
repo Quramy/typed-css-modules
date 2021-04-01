@@ -51,6 +51,15 @@ describe('DtsCreator', () => {
           done();
         });
     });
+    it('returns DtsContent instance combined css', done => {
+      creator.create('test/combined/combined.css').then(content => {
+          assert.equal(content.contents.length, 3);
+          assert.equal(content.contents[0], 'readonly "block": string;');
+          assert.equal(content.contents[1], 'readonly "myClass": string;');
+          assert.equal(content.contents[2], 'readonly "box": string;');
+          done();
+      });
+    });
   });
 
   describe('#modify path', () => {
