@@ -66,6 +66,7 @@ export class DtsContent {
 
         if (this.namedExports) {
             return [
+                'export const __esModule: true;',
                 ...this.resultList.map(line => 'export ' + line),
                 ''
             ].join(os.EOL) + this.EOL;

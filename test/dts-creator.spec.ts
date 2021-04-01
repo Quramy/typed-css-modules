@@ -129,6 +129,7 @@ export = styles;
         assert.equal(
           content.formatted,
           `\
+export const __esModule: true;
 export const myClass: string;
 
 `
@@ -142,6 +143,7 @@ export const myClass: string;
         assert.equal(
           content.formatted,
           `\
+export const __esModule: true;
 export const myClass: string;
 
 `
