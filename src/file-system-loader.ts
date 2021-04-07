@@ -37,8 +37,10 @@ export default class FileSystemLoader {
     const rootRelativePath = path.resolve(relativeDir, newPath);
     let fileRelativePath = path.resolve(path.join(this.root, relativeDir), newPath);
 
+    const isNodeModule = (fileName: string) => fileName[0] !== '.' && fileName[0] !== '/';
+
     // if the path is not relative or absolute, try to resolve it in node_modules
-    if (newPath[0] !== '.' && newPath[0] !== '/') {
+    if (isNodeModule(newPath)) {
       try {
         fileRelativePath = require.resolve(newPath);
       }
@@ -69,7 +71,7 @@ export default class FileSystemLoader {
 
     const { injectableSource, exportTokens } = await this.core.load(source, rootRelativePath, trace, this.fetch.bind(this));
 
-    const re = new RegExp(/@import\s'(\D+?.css)';/, 'gm');
+    const re = new RegExp(/@import\s'(\D+?)';/, 'gm');
 
     let importTokens: Core.ExportTokens = {};
 
@@ -79,8 +81,11 @@ export default class FileSystemLoader {
       const importFile = result?.[1];
 
       if  (importFile)  {
-        const localTokens = await this.fetch(importFile, rootRelativePath, undefined, initialContents);
+        let importFilePath = isNodeModule(importFile) ?
+            importFile :
+            path.resolve(path.dirname(fileRelativePath), importFile);
 
+        const localTokens = await this.fetch(importFilePath, relativeTo, undefined, initialContents);
         Object.assign(importTokens, localTokens);
       }
     }
