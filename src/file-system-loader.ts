@@ -90,8 +90,10 @@ export default class FileSystemLoader {
       }
     }
 
+    const tokens = {...exportTokens, ...importTokens};
+
     this.sources[trace] = injectableSource;
-    this.tokensByFile[fileRelativePath] = exportTokens;
-    return {...exportTokens, ...importTokens};
+    this.tokensByFile[fileRelativePath] = tokens;
+    return tokens;
   }
 }
