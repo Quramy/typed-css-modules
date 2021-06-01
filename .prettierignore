@@ -1,0 +1,8 @@
+.git/
+.husky/
+node_modules/
+lib/
+__snapshots__/
+coverage/
+*.css.d.ts
+test/**/*.css

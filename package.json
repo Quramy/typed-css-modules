@@ -7,10 +7,16 @@
   "scripts": {
     "clean": "rimraf lib/",
     "build": "npm run clean && tsc && chmod +x lib/cli.js",
+    "prettier": "prettier \"*.{md,js,json.yml,yaml}\" \"{src,test}/**/*\"",
+    "format": "npm run prettier -- --write",
+    "lint": "npm run prettier -- --check",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --coverage",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "bin": {
     "tcm": "lib/cli.js"
@@ -37,7 +43,7 @@
     "glob": "^7.1.2",
     "is-there": "^4.4.2",
     "mkdirp": "^1.0.0",
-    "yargs": "^15.3.1"
+    "yargs": "^15.4.1"
   },
   "devDependencies": {
     "@types/glob": "^7.1.1",
@@ -45,7 +51,11 @@
     "@types/mkdirp": "^1.0.0",
     "@types/node": "^14.14.37",
     "@types/yargs": "^15.0.4",
+    "husky": "^6.0.0",
     "jest": "^27.0.0",
+    "pinst": "^2.1.6",
+    "prettier": "^2.3.0",
+    "pretty-quick": "^3.1.0",
     "ts-jest": "^27.0.0",
     "typescript": "^4.3.0"
   },
