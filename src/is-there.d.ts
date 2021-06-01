@@ -1,4 +1,4 @@
 declare module 'is-there' {
-    function isThere(path: string): boolean;
-    export = isThere;
+  function isThere(path: string): boolean;
+  export = isThere;
 }

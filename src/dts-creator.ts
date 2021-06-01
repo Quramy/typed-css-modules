@@ -1,10 +1,9 @@
 import * as process from 'process';
-import * as path from'path';
+import * as path from 'path';
 import * as os from 'os';
 import FileSystemLoader from './file-system-loader';
-import {DtsContent, CamelCaseOption} from "./dts-content";
-import {Plugin} from "postcss";
-
+import { DtsContent, CamelCaseOption } from './dts-content';
+import { Plugin } from 'postcss';
 
 interface DtsCreatorOptions {
   rootDir?: string;
@@ -30,7 +29,7 @@ export class DtsCreator {
   private EOL: string;
 
   constructor(options?: DtsCreatorOptions) {
-    if(!options) options = {};
+    if (!options) options = {};
     this.rootDir = options.rootDir || process.cwd();
     this.searchDir = options.searchDir || '';
     this.outDir = options.outDir || this.searchDir;
@@ -45,17 +44,17 @@ export class DtsCreator {
 
   public async create(filePath: string, initialContents?: string, clearCache: boolean = false): Promise<DtsContent> {
     let rInputPath: string;
-    if(path.isAbsolute(filePath)) {
+    if (path.isAbsolute(filePath)) {
       rInputPath = path.relative(this.inputDirectory, filePath);
-    }else{
+    } else {
       rInputPath = path.relative(this.inputDirectory, path.join(process.cwd(), filePath));
     }
-    if(clearCache) {
+    if (clearCache) {
       this.loader.tokensByFile = {};
     }
 
-    const res = await this.loader.fetch(filePath, "/", undefined, initialContents);
-    if(res) {
+    const res = await this.loader.fetch(filePath, '/', undefined, initialContents);
+    if (res) {
       const tokens = res;
       const keys = Object.keys(tokens);
 
@@ -68,11 +67,11 @@ export class DtsCreator {
         rawTokenList: keys,
         namedExports: this.namedExports,
         camelCase: this.camelCase,
-        EOL: this.EOL
+        EOL: this.EOL,
       });
 
       return content;
-    }else{
+    } else {
       throw res;
     }
   }
