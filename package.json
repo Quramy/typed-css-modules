@@ -50,7 +50,7 @@
     "@types/jest": "26.0.24",
     "@types/mkdirp": "1.0.2",
     "@types/node": "14.17.5",
-    "@types/yargs": "15.0.4",
+    "@types/yargs": "15.0.14",
     "husky": "7.0.1",
     "jest": "27.0.6",
     "pinst": "2.1.6",
