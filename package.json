@@ -51,7 +51,7 @@
     "@types/mkdirp": "1.0.2",
     "@types/node": "14.17.17",
     "@types/yargs": "15.0.4",
-    "husky": "7.0.1",
+    "husky": "7.0.2",
     "jest": "27.2.0",
     "pinst": "2.1.6",
     "prettier": "2.4.1",
