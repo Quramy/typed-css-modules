@@ -77,7 +77,7 @@ export default class FileSystemLoader {
       this.fetch.bind(this),
     );
 
-    const re = new RegExp(/@import\s'(\D+?)';/, 'gm');
+    const re = new RegExp(/@import\s['"](\D+?)['"];/, 'gm');
 
     let importTokens: Core.ExportTokens = {};
 
