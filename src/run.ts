@@ -7,6 +7,7 @@ import { DtsCreator } from './dts-creator';
 import { DtsContent } from './dts-content';
 
 const glob = util.promisify(_glob);
+const cssExtRegex = /\.css$/i;
 
 interface RunOptions {
   pattern?: string;
@@ -31,7 +32,7 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
   });
 
   const writeFile = async (f: string): Promise<void> => {
-    if (!f.endsWith('.css')) {
+    if (!cssExtRegex.test(f)) {
       return;
     }
     try {
