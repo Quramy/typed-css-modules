@@ -31,6 +31,9 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
   });
 
   const writeFile = async (f: string): Promise<void> => {
+    if (!f.endsWith('.css')) {
+      return;
+    }
     try {
       const content: DtsContent = await creator.create(f, undefined, !!options.watch);
       await content.writeFile();
