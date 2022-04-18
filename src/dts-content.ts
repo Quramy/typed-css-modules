@@ -91,9 +91,13 @@ export class DtsContent {
     return path.join(this.rootDir, this.searchDir, this.rInputPath);
   }
 
+  public get relativeInputFilePath(): string {
+    return path.join(this.searchDir, this.rInputPath);
+  }
+
   public async checkFile(postprocessor = (formatted: string) => formatted): Promise<boolean> {
     if (!isThere(this.outputFilePath)) {
-      console.error(chalk.red(`[ERROR] Type file needs to be generated for '${this.inputFilePath}'`));
+      console.error(chalk.red(`[ERROR] Type file needs to be generated for '${this.relativeInputFilePath}'`));
       return false;
     }
 

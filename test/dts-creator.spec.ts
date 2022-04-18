@@ -4,6 +4,7 @@ import * as path from 'path';
 
 import * as assert from 'assert';
 import { DtsCreator } from '../src/dts-creator';
+import SpyInstance = jest.SpyInstance;
 
 describe('DtsCreator', () => {
   var creator = new DtsCreator();
@@ -85,6 +86,15 @@ describe('DtsContent', () => {
     it('returns original CSS file name', done => {
       new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
         assert.equal(path.relative(process.cwd(), content.inputFilePath), path.normalize('test/testStyle.css'));
+        done();
+      });
+    });
+  });
+
+  describe('#relativeInputFilePath', () => {
+    it('returns relative original CSS file name', done => {
+      new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
+        assert.equal(content.relativeInputFilePath, 'test/testStyle.css');
         done();
       });
     });
@@ -210,12 +220,17 @@ export = styles;
   });
 
   describe('#checkFile', () => {
-    const mockExit = jest.spyOn(process, 'exit').mockImplementation(exitCode => {
-      throw new Error(`process.exit: ${exitCode}`);
-    });
+    let mockExit: SpyInstance;
+    let mockConsoleLog: SpyInstance;
+    let mockConsoleError: SpyInstance;
 
-    const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
-    const mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
+    beforeAll(() => {
+      mockExit = jest.spyOn(process, 'exit').mockImplementation(exitCode => {
+        throw new Error(`process.exit: ${exitCode}`);
+      });
+      mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+      mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
+    });
 
     beforeEach(() => {
       jest.clearAllMocks();
