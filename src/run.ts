@@ -16,6 +16,7 @@ interface RunOptions {
   namedExports?: boolean;
   dropExtension?: boolean;
   silent?: boolean;
+  listDifferent?: boolean;
 }
 
 export async function run(searchDir: string, options: RunOptions = {}): Promise<void> {
@@ -30,6 +31,16 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
     dropExtension: options.dropExtension,
   });
 
+  const checkFile = async (f: string): Promise<boolean> => {
+    try {
+      const content: DtsContent = await creator.create(f, undefined, false);
+      return await content.checkFile();
+    } catch (error) {
+      console.error(chalk.red(`[ERROR] An error occurred checking '${f}':\n${error}`));
+      return false;
+    }
+  };
+
   const writeFile = async (f: string): Promise<void> => {
     try {
       const content: DtsContent = await creator.create(f, undefined, !!options.watch);
@@ -42,6 +53,15 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
       console.error(chalk.red('[Error] ' + error));
     }
   };
+
+  if (options.listDifferent) {
+    const files = await glob(filesPattern);
+    const hasErrors = (await Promise.all(files.map(checkFile))).includes(false);
+    if (hasErrors) {
+      process.exit(1);
+    }
+    return;
+  }
 
   if (!options.watch) {
     const files = await glob(filesPattern);

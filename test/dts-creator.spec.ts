@@ -3,7 +3,6 @@
 import * as path from 'path';
 
 import * as assert from 'assert';
-import * as os from 'os';
 import { DtsCreator } from '../src/dts-creator';
 
 describe('DtsCreator', () => {
@@ -207,6 +206,61 @@ export = styles;
           done();
         });
       });
+    });
+  });
+
+  describe('#checkFile', () => {
+    const mockExit = jest.spyOn(process, 'exit').mockImplementation(exitCode => {
+      throw new Error(`process.exit: ${exitCode}`);
+    });
+
+    const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation();
+    const mockConsoleError = jest.spyOn(console, 'error').mockImplementation();
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+      mockExit.mockRestore();
+      mockConsoleLog.mockRestore();
+      mockConsoleError.mockRestore();
+    });
+
+    it('return false if type file is missing', done => {
+      new DtsCreator()
+        .create('test/empty.css')
+        .then(content => {
+          return content.checkFile();
+        })
+        .then(result => {
+          assert.equal(result, false);
+          done();
+        });
+    });
+
+    it('returns false if type file content is different', done => {
+      new DtsCreator()
+        .create('test/different.css')
+        .then(content => {
+          return content.checkFile();
+        })
+        .then(result => {
+          assert.equal(result, false);
+          done();
+        });
+    });
+
+    it('returns true if type files match', done => {
+      new DtsCreator()
+        .create('test/testStyle.css')
+        .then(content => {
+          return content.checkFile();
+        })
+        .then(result => {
+          assert.equal(result, true);
+          done();
+        });
     });
   });
 
