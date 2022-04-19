@@ -83,8 +83,11 @@ export class DtsContent {
   }
 
   public get outputFilePath(): string {
-    const outputFileName = this.dropExtension ? removeExtension(this.rInputPath) : this.rInputPath;
-    return path.join(this.rootDir, this.outDir, outputFileName + '.d.ts');
+    return path.join(this.rootDir, this.outDir, this.outputFileName);
+  }
+
+  public get relativeOutputFilePath(): string {
+    return path.join(this.outDir, this.outputFileName);
   }
 
   public get inputFilePath(): string {
@@ -105,7 +108,7 @@ export class DtsContent {
     const fileContent = (await readFile(this.outputFilePath)).toString();
 
     if (fileContent !== finalOutput) {
-      console.error(chalk.red(`[ERROR] Check type definitions for '${this.outputFilePath}'`));
+      console.error(chalk.red(`[ERROR] Check type definitions for '${this.relativeOutputFilePath}'`));
       return false;
     }
     return true;
@@ -167,6 +170,11 @@ export class DtsContent {
     return str.replace(/-+(\w)/g, function (match, firstLetter) {
       return firstLetter.toUpperCase();
     });
+  }
+
+  private get outputFileName(): string {
+    const outputFileName = this.dropExtension ? removeExtension(this.rInputPath) : this.rInputPath;
+    return outputFileName + '.d.ts';
   }
 }
 
