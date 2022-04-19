@@ -5,6 +5,7 @@ import isThere from 'is-there';
 import * as mkdirp from 'mkdirp';
 import * as util from 'util';
 import camelcase from 'camelcase';
+import chalk from 'chalk';
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
@@ -88,6 +89,26 @@ export class DtsContent {
 
   public get inputFilePath(): string {
     return path.join(this.rootDir, this.searchDir, this.rInputPath);
+  }
+
+  public get relativeInputFilePath(): string {
+    return path.join(this.searchDir, this.rInputPath);
+  }
+
+  public async checkFile(postprocessor = (formatted: string) => formatted): Promise<boolean> {
+    if (!isThere(this.outputFilePath)) {
+      console.error(chalk.red(`[ERROR] Type file needs to be generated for '${this.relativeInputFilePath}'`));
+      return false;
+    }
+
+    const finalOutput = postprocessor(this.formatted);
+    const fileContent = (await readFile(this.outputFilePath)).toString();
+
+    if (fileContent !== finalOutput) {
+      console.error(chalk.red(`[ERROR] Check type definitions for '${this.outputFilePath}'`));
+      return false;
+    }
+    return true;
   }
 
   public async writeFile(postprocessor = (formatted: string) => formatted): Promise<void> {

@@ -16,6 +16,12 @@ const yarg = yargs
   .alias('o', 'outDir')
   .describe('o', 'Output directory')
   .string('o')
+  .alias('l', 'listDifferent')
+  .describe(
+    'l',
+    'List any files that are different than those that would be generated. If any are different, exit with a status code 1.',
+  )
+  .boolean('l')
   .alias('w', 'watch')
   .describe('w', "Watch input directory's css files or pattern")
   .boolean('w')
@@ -63,5 +69,6 @@ async function main(): Promise<void> {
     namedExports: argv.e,
     dropExtension: argv.d,
     silent: argv.s,
+    listDifferent: argv.l,
   });
 }

@@ -88,6 +88,11 @@ tcm -p 'src/**/*.icss' .
 
 With `-w` or `--watch`, this CLI watches files in the input directory.
 
+#### validating type files
+
+With `-l` or `--listDifferent`, list any files that are different than those that would be generated.
+If any are different, exit with a status code 1.
+
 #### camelize CSS token
 
 With `-c` or `--camelCase`, kebab-cased CSS classes(such as `.my-class {...}`) are exported as camelized TypeScript varibale name(`export const myClass: string`).
