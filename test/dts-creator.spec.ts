@@ -116,6 +116,28 @@ describe('DtsContent', () => {
     });
   });
 
+  describe('#relativeOutputFilePath', () => {
+    it('adds d.ts to the original filename', done => {
+      new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
+        assert.equal(
+          path.relative(process.cwd(), content.relativeOutputFilePath),
+          path.normalize('test/testStyle.css.d.ts'),
+        );
+        done();
+      });
+    });
+
+    it('can drop the original extension when asked', done => {
+      new DtsCreator({ dropExtension: true }).create(path.normalize('test/testStyle.css')).then(content => {
+        assert.equal(
+          path.relative(process.cwd(), content.relativeOutputFilePath),
+          path.normalize('test/testStyle.d.ts'),
+        );
+        done();
+      });
+    });
+  });
+
   describe('#formatted', () => {
     it('returns formatted .d.ts string', done => {
       new DtsCreator().create('test/testStyle.css').then(content => {
