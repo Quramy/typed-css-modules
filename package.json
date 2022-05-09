@@ -46,7 +46,7 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@types/glob": "7.1.4",
+    "@types/glob": "7.2.0",
     "@types/jest": "27.5.0",
     "@types/mkdirp": "1.0.2",
     "@types/node": "16.11.31",
