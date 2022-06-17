@@ -7,6 +7,7 @@ import { DtsCreator } from './dts-creator';
 import { DtsContent } from './dts-content';
 
 const glob = util.promisify(_glob);
+const cssExtRegex = /\.css$/i;
 
 interface RunOptions {
   pattern?: string;
@@ -42,6 +43,9 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
   };
 
   const writeFile = async (f: string): Promise<void> => {
+    if (!cssExtRegex.test(f)) {
+      return;
+    }
     try {
       const content: DtsContent = await creator.create(f, undefined, !!options.watch);
       await content.writeFile();
