@@ -28,6 +28,9 @@ const yarg = yargs
   .alias('c', 'camelCase')
   .describe('c', 'Convert CSS class tokens to camelcase')
   .boolean('c')
+  .alias('sq', 'singleQuote')
+  .describe('sq', 'Use single quotes for writing the keys when they have a dash')
+  .boolean('sq')
   .alias('e', 'namedExports')
   .describe('e', 'Use named exports as opposed to default exports to enable tree shaking.')
   .boolean('e')
@@ -66,6 +69,7 @@ async function main(): Promise<void> {
     outDir: argv.o,
     watch: argv.w,
     camelCase: argv.c,
+    singleQuote: argv.sq,
     namedExports: argv.e,
     dropExtension: argv.d,
     silent: argv.s,

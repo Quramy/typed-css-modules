@@ -21,6 +21,7 @@ interface DtsContentOptions {
   rawTokenList: string[];
   namedExports: boolean;
   camelCase: CamelCaseOption;
+  singleQuote?: boolean;
   EOL: string;
 }
 
@@ -33,6 +34,7 @@ export class DtsContent {
   private rawTokenList: string[];
   private namedExports: boolean;
   private camelCase: CamelCaseOption;
+  private singleQuote?: boolean;
   private resultList: string[];
   private EOL: string;
 
@@ -45,6 +47,7 @@ export class DtsContent {
     this.rawTokenList = options.rawTokenList;
     this.namedExports = options.namedExports;
     this.camelCase = options.camelCase;
+    this.singleQuote = options.singleQuote;
     this.EOL = options.EOL;
 
     // when using named exports, camelCase must be enabled by default
@@ -71,11 +74,13 @@ export class DtsContent {
       );
     }
 
-    return (
+    const data = (
       ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export = styles;', ''].join(
         os.EOL,
       ) + this.EOL
     );
+
+    return this.singleQuote ? data.replace(/\"/g, "'") : data;
   }
 
   public get tokens(): string[] {

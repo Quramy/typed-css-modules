@@ -239,6 +239,40 @@ export = styles;
         });
       });
     });
+
+    describe('#singleQuote option', () => {
+      it('singleQuote == undefined: returns same as before', done => {
+        new DtsCreator().create('test/kebabed.css').then(content => {
+          assert.equal(
+            content.formatted,
+            `\
+declare const styles: {
+  readonly "my-class": string;
+};
+export = styles;
+
+`,
+          );
+          done();
+        });
+      });
+
+      it('singleQuote == true: returns kebab keys with single quote', done => {
+        new DtsCreator({ singleQuote: true, EOL: '\n' }).create('test/kebabedUpperCase.css').then(content => {
+          assert.equal(
+            content.formatted,
+            `\
+declare const styles: {
+  readonly 'My-class': string;
+};
+export = styles;
+
+`,
+          );
+          done();
+        });
+      });
+    });
   });
 
   describe('#checkFile', () => {

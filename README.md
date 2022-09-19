@@ -117,6 +117,10 @@ export = styles;
 
 See also [webpack css-loader's camelCase option](https://github.com/webpack/css-loader#camelcase).
 
+#### Use single quotes to class names in the .d.ts files
+
+With `-sq` or `--singleQuote`, you can configure what quote to use. Useful when tools like prettier format your .d.ts files.
+
 #### named exports (enable tree shaking)
 
 With `-e` or `--namedExports`, types are exported as named exports as opposed to default exports.
@@ -177,6 +181,7 @@ You can set the following options:
 - `option.searchDir`: Directory which includes target `*.css` files(default: `'./'`).
 - `option.outDir`: Output directory(default: `option.searchDir`).
 - `option.camelCase`: Camelize CSS class tokens.
+- `option.singleQuote`: Use single quotes on dashed keys.
 - `option.namedExports`: Use named exports as opposed to default exports to enable tree shaking. Requires `import * as style from './file.module.css';` (default: `false`)
 - `option.EOL`: EOL (end of line) for the generated `d.ts` files. Possible values `'\n'` or `'\r\n'`(default: `os.EOL`).
 
