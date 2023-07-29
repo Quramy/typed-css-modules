@@ -114,8 +114,10 @@ export class DtsContent {
     return true;
   }
 
-  public async writeFile(postprocessor = (formatted: string) => formatted): Promise<void> {
-    const finalOutput = postprocessor(this.formatted);
+  public async writeFile(
+    postprocessor: (_: string) => Promise<string> | string = (formatted: string) => formatted,
+  ): Promise<void> {
+    const finalOutput = await postprocessor(this.formatted);
 
     const outPathDir = path.dirname(this.outputFilePath);
     if (!isThere(outPathDir)) {
