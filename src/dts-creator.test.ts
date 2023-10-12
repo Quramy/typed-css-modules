@@ -11,7 +11,7 @@ describe('DtsCreator', () => {
 
   describe('#create', () => {
     it('returns DtsContent instance simple css', done => {
-      creator.create('test/testStyle.css').then(content => {
+      creator.create('fixtures/testStyle.css').then(content => {
         assert.equal(content.contents.length, 1);
         assert.equal(content.contents[0], 'readonly "myClass": string;');
         done();
@@ -19,7 +19,7 @@ describe('DtsCreator', () => {
     });
     it('rejects an error with invalid CSS', done => {
       creator
-        .create('test/errorCss.css')
+        .create('fixtures/errorCss.css')
         .then(content => {
           assert.fail();
         })
@@ -29,28 +29,28 @@ describe('DtsCreator', () => {
         });
     });
     it('returns DtsContent instance from composing css', done => {
-      creator.create('test/composer.css').then(content => {
+      creator.create('fixtures/composer.css').then(content => {
         assert.equal(content.contents.length, 1);
         assert.equal(content.contents[0], 'readonly "root": string;');
         done();
       });
     });
     it('returns DtsContent instance from composing css whose has invalid import/composes', done => {
-      creator.create('test/invalidComposer.scss').then(content => {
+      creator.create('fixtures/invalidComposer.scss').then(content => {
         assert.equal(content.contents.length, 1);
         assert.equal(content.contents[0], 'readonly "myClass": string;');
         done();
       });
     });
     it('returns DtsContent instance from the pair of path and contents', done => {
-      creator.create('test/somePath', `.myClass { color: red }`).then(content => {
+      creator.create('fixtures/somePath', `.myClass { color: red }`).then(content => {
         assert.equal(content.contents.length, 1);
         assert.equal(content.contents[0], 'readonly "myClass": string;');
         done();
       });
     });
     it('returns DtsContent instance combined css', done => {
-      creator.create('test/combined/combined.css').then(content => {
+      creator.create('fixtures/combined/combined.css').then(content => {
         assert.equal(content.contents.length, 3);
         assert.equal(content.contents[0], 'readonly "block": string;');
         assert.equal(content.contents[1], 'readonly "box": string;');
@@ -62,8 +62,8 @@ describe('DtsCreator', () => {
 
   describe('#modify path', () => {
     it('can be set outDir', done => {
-      new DtsCreator({ searchDir: 'test', outDir: 'dist' })
-        .create(path.normalize('test/testStyle.css'))
+      new DtsCreator({ searchDir: 'fixtures', outDir: 'dist' })
+        .create(path.normalize('fixtures/testStyle.css'))
         .then(content => {
           assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('dist/testStyle.css.d.ts'));
           done();
@@ -75,7 +75,7 @@ describe('DtsCreator', () => {
 describe('DtsContent', () => {
   describe('#tokens', () => {
     it('returns original tokens', done => {
-      new DtsCreator().create('test/testStyle.css').then(content => {
+      new DtsCreator().create('fixtures/testStyle.css').then(content => {
         assert.equal(content.tokens[0], 'myClass');
         done();
       });
@@ -84,8 +84,8 @@ describe('DtsContent', () => {
 
   describe('#inputFilePath', () => {
     it('returns original CSS file name', done => {
-      new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
-        assert.equal(path.relative(process.cwd(), content.inputFilePath), path.normalize('test/testStyle.css'));
+      new DtsCreator().create(path.normalize('fixtures/testStyle.css')).then(content => {
+        assert.equal(path.relative(process.cwd(), content.inputFilePath), path.normalize('fixtures/testStyle.css'));
         done();
       });
     });
@@ -93,8 +93,8 @@ describe('DtsContent', () => {
 
   describe('#relativeInputFilePath', () => {
     it('returns relative original CSS file name', done => {
-      new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
-        assert.equal(content.relativeInputFilePath, 'test/testStyle.css');
+      new DtsCreator().create(path.normalize('fixtures/testStyle.css')).then(content => {
+        assert.equal(content.relativeInputFilePath, 'fixtures/testStyle.css');
         done();
       });
     });
@@ -102,15 +102,18 @@ describe('DtsContent', () => {
 
   describe('#outputFilePath', () => {
     it('adds d.ts to the original filename', done => {
-      new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
-        assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('test/testStyle.css.d.ts'));
+      new DtsCreator().create(path.normalize('fixtures/testStyle.css')).then(content => {
+        assert.equal(
+          path.relative(process.cwd(), content.outputFilePath),
+          path.normalize('fixtures/testStyle.css.d.ts'),
+        );
         done();
       });
     });
 
     it('can drop the original extension when asked', done => {
-      new DtsCreator({ dropExtension: true }).create(path.normalize('test/testStyle.css')).then(content => {
-        assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('test/testStyle.d.ts'));
+      new DtsCreator({ dropExtension: true }).create(path.normalize('fixtures/testStyle.css')).then(content => {
+        assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('fixtures/testStyle.d.ts'));
         done();
       });
     });
@@ -118,20 +121,20 @@ describe('DtsContent', () => {
 
   describe('#relativeOutputFilePath', () => {
     it('adds d.ts to the original filename', done => {
-      new DtsCreator().create(path.normalize('test/testStyle.css')).then(content => {
+      new DtsCreator().create(path.normalize('fixtures/testStyle.css')).then(content => {
         assert.equal(
           path.relative(process.cwd(), content.relativeOutputFilePath),
-          path.normalize('test/testStyle.css.d.ts'),
+          path.normalize('fixtures/testStyle.css.d.ts'),
         );
         done();
       });
     });
 
     it('can drop the original extension when asked', done => {
-      new DtsCreator({ dropExtension: true }).create(path.normalize('test/testStyle.css')).then(content => {
+      new DtsCreator({ dropExtension: true }).create(path.normalize('fixtures/testStyle.css')).then(content => {
         assert.equal(
           path.relative(process.cwd(), content.relativeOutputFilePath),
-          path.normalize('test/testStyle.d.ts'),
+          path.normalize('fixtures/testStyle.d.ts'),
         );
         done();
       });
@@ -140,7 +143,7 @@ describe('DtsContent', () => {
 
   describe('#formatted', () => {
     it('returns formatted .d.ts string', done => {
-      new DtsCreator().create('test/testStyle.css').then(content => {
+      new DtsCreator().create('fixtures/testStyle.css').then(content => {
         assert.equal(
           content.formatted,
           `\
@@ -156,7 +159,7 @@ export = styles;
     });
 
     it('returns named exports formatted .d.ts string', done => {
-      new DtsCreator({ namedExports: true }).create('test/testStyle.css').then(content => {
+      new DtsCreator({ namedExports: true }).create('fixtures/testStyle.css').then(content => {
         assert.equal(
           content.formatted,
           `\
@@ -170,7 +173,7 @@ export const myClass: string;
     });
 
     it('returns camelcase names when using named exports as formatted .d.ts string', done => {
-      new DtsCreator({ namedExports: true }).create('test/kebabedUpperCase.css').then(content => {
+      new DtsCreator({ namedExports: true }).create('fixtures/kebabedUpperCase.css').then(content => {
         assert.equal(
           content.formatted,
           `\
@@ -184,7 +187,7 @@ export const myClass: string;
     });
 
     it('returns empty object exportion when the result list has no items', done => {
-      new DtsCreator().create('test/empty.css').then(content => {
+      new DtsCreator().create('fixtures/empty.css').then(content => {
         assert.equal(content.formatted, 'export {};');
         done();
       });
@@ -192,7 +195,7 @@ export const myClass: string;
 
     describe('#camelCase option', () => {
       it('camelCase == true: returns camelized tokens for lowercase classes', done => {
-        new DtsCreator({ camelCase: true }).create('test/kebabed.css').then(content => {
+        new DtsCreator({ camelCase: true }).create('fixtures/kebabed.css').then(content => {
           assert.equal(
             content.formatted,
             `\
@@ -208,7 +211,7 @@ export = styles;
       });
 
       it('camelCase == true: returns camelized tokens for uppercase classes ', done => {
-        new DtsCreator({ camelCase: true }).create('test/kebabedUpperCase.css').then(content => {
+        new DtsCreator({ camelCase: true }).create('fixtures/kebabedUpperCase.css').then(content => {
           assert.equal(
             content.formatted,
             `\
@@ -224,7 +227,7 @@ export = styles;
       });
 
       it('camelCase == "dashes": returns camelized tokens for dashes only', done => {
-        new DtsCreator({ camelCase: 'dashes' }).create('test/kebabedUpperCase.css').then(content => {
+        new DtsCreator({ camelCase: 'dashes' }).create('fixtures/kebabedUpperCase.css').then(content => {
           assert.equal(
             content.formatted,
             `\
@@ -266,7 +269,7 @@ export = styles;
 
     it('return false if type file is missing', done => {
       new DtsCreator()
-        .create('test/empty.css')
+        .create('fixtures/empty.css')
         .then(content => {
           return content.checkFile();
         })
@@ -278,7 +281,7 @@ export = styles;
 
     it('returns false if type file content is different', done => {
       new DtsCreator()
-        .create('test/different.css')
+        .create('fixtures/different.css')
         .then(content => {
           return content.checkFile();
         })
@@ -290,7 +293,7 @@ export = styles;
 
     it('returns true if type files match', done => {
       new DtsCreator()
-        .create('test/testStyle.css')
+        .create('fixtures/testStyle.css')
         .then(content => {
           return content.checkFile();
         })
@@ -304,7 +307,7 @@ export = styles;
   describe('#writeFile', () => {
     it('accepts a postprocessor sync function', done => {
       new DtsCreator()
-        .create('test/testStyle.css')
+        .create('fixtures/testStyle.css')
         .then(content => {
           return content.writeFile(
             formatted => `// this banner was added to the .d.ts file automatically.\n${formatted}`,
@@ -317,7 +320,7 @@ export = styles;
 
     it('accepts a postprocessor async function', done => {
       new DtsCreator()
-        .create('test/testStyle.css')
+        .create('fixtures/testStyle.css')
         .then(content => {
           return content.writeFile(
             async formatted => `// this banner was added to the .d.ts file automatically.\n${formatted}`,
@@ -330,7 +333,7 @@ export = styles;
 
     it('writes a file', done => {
       new DtsCreator()
-        .create('test/testStyle.css')
+        .create('fixtures/testStyle.css')
         .then(content => {
           return content.writeFile();
         })

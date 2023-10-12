@@ -6,3 +6,4 @@ __snapshots__/
 coverage/
 *.css.d.ts
 test/**/*.css
+fixtures/**/*.css
