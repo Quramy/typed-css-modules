@@ -144,7 +144,8 @@ export class DtsContent {
 
     const result = this.rawTokenList
       .map(k => convertKey(k))
-      .map(k => (!this.namedExports ? 'readonly "' + k + '": string;' : 'const ' + k + ': string;'));
+      .map(k => (!this.namedExports ? 'readonly "' + k + '": string;' : 'const ' + k + ': string;'))
+      .sort();
 
     return result;
   }
