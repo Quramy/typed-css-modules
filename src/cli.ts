@@ -1,42 +1,58 @@
 #!/usr/bin/env node
 
-import * as yargs from 'yargs';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
 import { run } from './run';
 
-const yarg = yargs
+const yarg = yargs(hideBin(process.argv))
   .usage('Create .css.d.ts from CSS modules *.css files.\nUsage: $0 [options] <search directory>')
   .example('$0 src/styles', '')
   .example('$0 src -o dist', '')
-  .example('$0 -p styles/**/*.icss -w', '')
+  .example('$0 -p styles/**/*.css -w', '')
   .detectLocale(false)
   .demand(['_'])
-  .alias('p', 'pattern')
-  .describe('p', 'Glob pattern with css files')
-  .string('p')
-  .alias('o', 'outDir')
-  .describe('o', 'Output directory')
-  .string('o')
-  .alias('l', 'listDifferent')
-  .describe(
-    'l',
-    'List any files that are different than those that would be generated. If any are different, exit with a status code 1.',
-  )
-  .boolean('l')
-  .alias('w', 'watch')
-  .describe('w', "Watch input directory's css files or pattern")
-  .boolean('w')
-  .alias('c', 'camelCase')
-  .describe('c', 'Convert CSS class tokens to camelcase')
-  .boolean('c')
-  .alias('e', 'namedExports')
-  .describe('e', 'Use named exports as opposed to default exports to enable tree shaking.')
-  .boolean('e')
-  .alias('d', 'dropExtension')
-  .describe('d', 'Drop the input files extension')
-  .boolean('d')
-  .alias('s', 'silent')
-  .describe('s', 'Silent output. Do not show "files written" messages')
-  .boolean('s')
+  .options({
+    p: {
+      desc: 'Glob pattern with css files',
+      type: 'string',
+      alias: 'pattern',
+    },
+    o: {
+      desc: 'Output directory',
+      type: 'string',
+      alias: 'outDir',
+    },
+    l: {
+      desc: 'List any files that are different than those that would be generated. If any are different, exit with a status code 1.',
+      type: 'boolean',
+      alias: 'listDifferent',
+    },
+    w: {
+      desc: "Watch input directory's css files or pattern",
+      type: 'boolean',
+      alias: 'watch',
+    },
+    c: {
+      desc: "Watch input directory's css files or pattern",
+      type: 'boolean',
+      alias: 'camelCase',
+    },
+    e: {
+      type: 'boolean',
+      desc: 'Use named exports as opposed to default exports to enable tree shaking.',
+      alias: 'namedExports',
+    },
+    d: {
+      type: 'boolean',
+      desc: "'Drop the input files extension'",
+      alias: 'dropExtension',
+    },
+    s: {
+      type: 'boolean',
+      alias: 'silent',
+      desc: 'Silent output. Do not show "files written" messages',
+    },
+  })
   .alias('h', 'help')
   .help('h')
   .version(require('../package.json').version);
@@ -44,7 +60,7 @@ const yarg = yargs
 main();
 
 async function main(): Promise<void> {
-  const argv = yarg.argv;
+  const argv = await yarg.argv;
 
   if (argv.h) {
     yarg.showHelp();
@@ -53,7 +69,7 @@ async function main(): Promise<void> {
 
   let searchDir: string;
   if (argv._ && argv._[0]) {
-    searchDir = argv._[0];
+    searchDir = `${argv._[0]}`;
   } else if (argv.p) {
     searchDir = './';
   } else {
