@@ -6,5 +6,7 @@
 !LICENSE.md
 !README.md
 
+/lib/**/*.test.*
+
 # exclude hidden files from the includes:
 .*
