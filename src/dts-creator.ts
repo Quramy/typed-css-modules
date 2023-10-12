@@ -13,7 +13,7 @@ interface DtsCreatorOptions {
   namedExports?: boolean;
   dropExtension?: boolean;
   EOL?: string;
-  loaderPlugins?: Plugin<any>[];
+  loaderPlugins?: Plugin[];
 }
 
 export class DtsCreator {

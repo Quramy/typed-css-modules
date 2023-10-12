@@ -1,25 +1,24 @@
 /* this file is forked from https://raw.githubusercontent.com/css-modules/css-modules-loader-core/master/src/file-system-loader.js */
 
-import Core from 'css-modules-loader-core';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as util from 'util';
-import { Plugin } from 'postcss';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+import type { Plugin } from 'postcss';
+
+import Core, { type ExportTokens } from './css-modules-loader-core';
 
 type Dictionary<T> = {
   [key: string]: T | undefined;
 };
-
-const readFile = util.promisify(fs.readFile);
 
 export default class FileSystemLoader {
   private root: string;
   private sources: Dictionary<string>;
   private importNr: number;
   private core: Core;
-  public tokensByFile: Dictionary<Core.ExportTokens>;
+  public tokensByFile: Dictionary<ExportTokens>;
 
-  constructor(root: string, plugins?: Array<Plugin<any>>) {
+  constructor(root: string, plugins?: Plugin[]) {
     this.root = root;
     this.sources = {};
     this.importNr = 0;
@@ -32,7 +31,7 @@ export default class FileSystemLoader {
     relativeTo: string,
     _trace?: string,
     initialContents?: string,
-  ): Promise<Core.ExportTokens> {
+  ): Promise<ExportTokens> {
     const newPath = _newPath.replace(/^["']|["']$/g, '');
     const trace = _trace || String.fromCharCode(this.importNr++);
 
@@ -58,7 +57,7 @@ export default class FileSystemLoader {
       }
 
       try {
-        source = await readFile(fileRelativePath, 'utf-8');
+        source = await fs.readFile(fileRelativePath, 'utf-8');
       } catch (error) {
         if (relativeTo && relativeTo !== '/') {
           return {};
@@ -79,7 +78,7 @@ export default class FileSystemLoader {
 
     const re = new RegExp(/@import\s'(\D+?)';/, 'gm');
 
-    let importTokens: Core.ExportTokens = {};
+    let importTokens: ExportTokens = {};
 
     let result;
 
