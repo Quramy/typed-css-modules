@@ -1,6 +1,9 @@
 name: publish
 
-on: push
+on:
+  push:
+    tags:
+      - '*'
 
 jobs:
   publish:
@@ -16,6 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
       - name: npm publish
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > ~/.npmrc
