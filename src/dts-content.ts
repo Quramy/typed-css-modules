@@ -63,7 +63,7 @@ export class DtsContent {
   }
 
   public get formatted(): string {
-    if (!this.resultList || !this.resultList.length) return '';
+    if (!this.resultList || !this.resultList.length) return 'export {};';
 
     if (this.namedExports) {
       return (

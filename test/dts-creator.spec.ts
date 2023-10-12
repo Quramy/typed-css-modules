@@ -185,7 +185,7 @@ export const myClass: string;
 
     it('returns empty object exportion when the result list has no items', done => {
       new DtsCreator().create('test/empty.css').then(content => {
-        assert.equal(content.formatted, '');
+        assert.equal(content.formatted, 'export {};');
         done();
       });
     });
