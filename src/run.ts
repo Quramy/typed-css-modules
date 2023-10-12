@@ -1,12 +1,9 @@
 import * as path from 'path';
-import * as util from 'util';
 import chalk from 'chalk';
 import * as chokidar from 'chokidar';
-import _glob from 'glob';
+import { glob } from 'glob';
 import { DtsCreator } from './dts-creator';
 import { DtsContent } from './dts-content';
-
-const glob = util.promisify(_glob);
 
 interface RunOptions {
   pattern?: string;
