@@ -1,3 +1,9 @@
 {
-  "extends": ["config:base"]
+  "automerge": true,
+  "automergeType": "branch",
+  "extends": ["config:base"],
+  "lockFileMaintenance": { "enabled": true },
+  "major": {
+    "automerge": false
+  }
 }
