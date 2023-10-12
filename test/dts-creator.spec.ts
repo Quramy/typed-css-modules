@@ -302,12 +302,25 @@ export = styles;
   });
 
   describe('#writeFile', () => {
-    it('accepts a postprocessor function', done => {
+    it('accepts a postprocessor sync function', done => {
       new DtsCreator()
         .create('test/testStyle.css')
         .then(content => {
           return content.writeFile(
             formatted => `// this banner was added to the .d.ts file automatically.\n${formatted}`,
+          );
+        })
+        .then(() => {
+          done();
+        });
+    });
+
+    it('accepts a postprocessor async function', done => {
+      new DtsCreator()
+        .create('test/testStyle.css')
+        .then(content => {
+          return content.writeFile(
+            async formatted => `// this banner was added to the .d.ts file automatically.\n${formatted}`,
           );
         })
         .then(() => {
