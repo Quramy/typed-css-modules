@@ -95,7 +95,7 @@ If any are different, exit with a status code 1.
 
 #### camelize CSS token
 
-With `-c` or `--camelCase`, kebab-cased CSS classes(such as `.my-class {...}`) are exported as camelized TypeScript varibale name(`export const myClass: string`).
+With `-c` or `--camelCase`, kebab-cased CSS classes(such as `.my-class {...}`) are exported as camelized TypeScript variable name(`export const myClass: string`).
 
 You can pass `--camelCase dashes` to only camelize dashes in the class name. Since version `0.27.1` in the
 webpack `css-loader`. This will keep upperCase class names intact, e.g.:
