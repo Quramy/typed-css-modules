@@ -47,7 +47,7 @@ For example, if you have .css files under `src` directory, exec the following:
 tcm src
 ```
 
-Then, this creates `*.css.d.ts` files under the directory which has original .css file.
+Then, this creates `*.css.d.ts` files under the directory which has the original .css file.
 
 ```text
 (your project root)
@@ -76,8 +76,8 @@ tcm -o dist src
 
 #### file name pattern
 
-By the default, this tool searches `**/*.css` files under `<input directory>`.
-If you can customize glob pattern, you can use `--pattern` or `-p` option.
+By default, this tool searches `**/*.css` files under `<input directory>`.
+If you can customize the glob pattern, you can use `--pattern` or `-p` option.
 Note the quotes around the glob to `-p` (they are required, so that your shell does not perform the expansion).
 
 ```sh
@@ -167,7 +167,7 @@ creator.create('src/style.css').then(content => {
 
 ### class DtsCreator
 
-DtsCreator instance processes the input CSS and create TypeScript definition contents.
+DtsCreator instance processes the input CSS and creates TypeScript definition contents.
 
 #### `new DtsCreator(option)`
 
@@ -189,7 +189,7 @@ Returns `DtsContent` instance.
 
 ### class DtsContent
 
-DtsContent instance has `*.d.ts` content, final output path, and function to write file.
+DtsContent instance has `*.d.ts` content, final output path, and function to write the file.
 
 #### `writeFile(postprocessor) => Promise(dtsContent)`
 
@@ -205,7 +205,7 @@ Writes the DtsContent instance's content to a file. Returns the DtsContent insta
 
 #### `tokens`
 
-An array of tokens retrieved from input CSS file.
+An array of tokens is retrieved from the input CSS file.
 e.g. `['myClass']`
 
 #### `contents`
@@ -215,7 +215,7 @@ e.g. `['export const myClass: string;']`.
 
 #### `formatted`
 
-A string of TypeScript definition expression.
+A string of TypeScript definition expressions.
 
 e.g.
 
@@ -225,7 +225,7 @@ export const myClass: string;
 
 #### `messageList`
 
-An array of messages. The messages contains invalid token information.
+An array of messages. The messages contain invalid token information.
 e.g. `['my-class is not valid TypeScript variable name.']`.
 
 #### `outputFilePath`
