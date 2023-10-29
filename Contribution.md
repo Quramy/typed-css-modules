@@ -1,6 +1,6 @@
-# CSS Modules TypeScript Contribution Guidelines
+# typed-css-modules Contribution Guidelines
 
-Welcome to the CSS Modules TypeScript project! We appreciate your interest in contributing to the project. This document outlines the guidelines for contributing to the project to help maintain a healthy and collaborative development environment.
+Welcome to the typed-css-modules project! We appreciate your interest in contributing to the project. This document outlines the guidelines for contributing to the project to help maintain a healthy and collaborative development environment.
 
 ## Table of Contents
 
