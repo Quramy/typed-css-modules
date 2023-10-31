@@ -74,7 +74,7 @@ tcm -o dist src
     | myStyle.css.d.ts [created]
 ```
 
-#### file name pattern
+#### File name pattern
 
 By default, this tool searches `**/*.css` files under `<input directory>`.
 If you can customize the glob pattern, you can use `--pattern` or `-p` option.
