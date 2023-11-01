@@ -43,20 +43,16 @@ If you have an idea for an enhancement or a new feature, create an enhancement p
 If you would like to contribute code to the project, please follow these steps:
 
 - Fork the repository on GitHub.
-  
--  Clone your fork locally:
- `git clone https://github.com/your-username/your-repo.git`
-   
+- Clone your fork locally:
+  `git clone https://github.com/your-username/your-repo.git`
 - Create a new branch for your changes:
-`git checkout -b feature/your-feature`
+  `git checkout -b feature/your-feature`
 
 - Make your changes and commit them with clear, concise messages.
 
 - Push your changes to your fork on GitHub:
-    `git push origin feature/your-feature`
-    
+  `git push origin feature/your-feature`
 - Create a Pull Request (PR) in the project repository, providing a detailed description of your changes and linking to any relevant issues.
-  
 - Participate in the review process and make any necessary updates.
 
 ## Style Guidelines
