@@ -60,7 +60,8 @@ export class DtsCreator {
 
     let keys: string[] = [];
     if (!isDelete) {
-      const res = await this.loader.fetch(filePath, '/');
+      const res = await this.loader.fetch(filePath, '/', undefined, initialContents);
+      console.log(res);
       if (!res) throw res;
 
       keys = Object.keys(res);
