@@ -1,6 +1,5 @@
-import * as path from 'path';
 import chalk from 'chalk';
-import * as chokidar from 'chokidar';
+import chokidar from 'chokidar';
 import { glob } from 'glob';
 import { DtsCreator } from './dts-creator';
 import { DtsContent } from './dts-content';

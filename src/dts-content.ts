@@ -1,15 +1,10 @@
-import * as fs from 'fs';
-import * as os from 'os';
-import * as path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
 import isThere from 'is-there';
-import * as mkdirp from 'mkdirp';
-import * as util from 'util';
+import { mkdirp } from 'mkdirp';
 import camelcase from 'camelcase';
 import chalk from 'chalk';
-
-const writeFile = util.promisify(fs.writeFile);
-const readFile = util.promisify(fs.readFile);
-const unlinkFile = util.promisify(fs.unlink);
 
 export type CamelCaseOption = boolean | 'dashes' | undefined;
 
@@ -107,7 +102,7 @@ export class DtsContent {
     }
 
     const finalOutput = postprocessor(this.formatted);
-    const fileContent = (await readFile(this.outputFilePath)).toString();
+    const fileContent = (await fs.readFile(this.outputFilePath)).toString();
 
     if (fileContent !== finalOutput) {
       console.error(chalk.red(`[ERROR] Check type definitions for '${this.relativeOutputFilePath}'`));
@@ -123,7 +118,7 @@ export class DtsContent {
 
     const outPathDir = path.dirname(this.outputFilePath);
     if (!isThere(outPathDir)) {
-      mkdirp.sync(outPathDir);
+      await mkdirp(outPathDir);
     }
 
     let isDirty = false;
@@ -131,7 +126,7 @@ export class DtsContent {
     if (!isThere(this.outputFilePath)) {
       isDirty = true;
     } else {
-      const content = (await readFile(this.outputFilePath)).toString();
+      const content = (await fs.readFile(this.outputFilePath)).toString();
 
       if (content !== finalOutput) {
         isDirty = true;
@@ -139,13 +134,13 @@ export class DtsContent {
     }
 
     if (isDirty) {
-      await writeFile(this.outputFilePath, finalOutput, 'utf8');
+      await fs.writeFile(this.outputFilePath, finalOutput, 'utf8');
     }
   }
 
   public async deleteFile() {
     if (isThere(this.outputFilePath)) {
-      await unlinkFile(this.outputFilePath);
+      await fs.unlink(this.outputFilePath);
     }
   }
 
@@ -178,9 +173,7 @@ export class DtsContent {
    * https://github.com/webpack-contrib/css-loader/blob/1fee60147b9dba9480c9385e0f4e581928ab9af9/lib/compile-exports.js#L3-L7
    */
   private dashesCamelCase(str: string): string {
-    return str.replace(/-+(\w)/g, function (match, firstLetter) {
-      return firstLetter.toUpperCase();
-    });
+    return str.replace(/-+(\w)/g, (_, firstLetter) => firstLetter.toUpperCase());
   }
 
   private get outputFileName(): string {

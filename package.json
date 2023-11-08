@@ -10,6 +10,7 @@
     "prettier": "prettier \"*.{md,js,json.yml,yaml}\" \"{src,test}/**/*\"",
     "format": "npm run prettier -- --write",
     "lint": "npm run prettier -- --check",
+    "compile": "tsc --noEmit",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --coverage",

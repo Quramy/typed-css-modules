@@ -1,9 +1,11 @@
-import * as process from 'process';
-import * as path from 'path';
-import * as os from 'os';
+import process from 'node:process';
+import path from 'node:path';
+import os from 'node:os';
+
+import { Plugin } from 'postcss';
+
 import FileSystemLoader from './file-system-loader';
 import { DtsContent, CamelCaseOption } from './dts-content';
-import { Plugin } from 'postcss';
 
 interface DtsCreatorOptions {
   rootDir?: string;
@@ -22,7 +24,6 @@ export class DtsCreator {
   private outDir: string;
   private loader: FileSystemLoader;
   private inputDirectory: string;
-  private outputDirectory: string;
   private camelCase: CamelCaseOption;
   private namedExports: boolean;
   private dropExtension: boolean;
@@ -35,7 +36,6 @@ export class DtsCreator {
     this.outDir = options.outDir || this.searchDir;
     this.loader = new FileSystemLoader(this.rootDir, options.loaderPlugins);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
-    this.outputDirectory = path.join(this.rootDir, this.outDir);
     this.camelCase = options.camelCase;
     this.namedExports = !!options.namedExports;
     this.dropExtension = !!options.dropExtension;
