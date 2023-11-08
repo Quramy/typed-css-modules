@@ -17,7 +17,7 @@ interface RunOptions {
 }
 
 export async function run(searchDir: string, options: RunOptions = {}): Promise<void> {
-  const filesPattern = path.join(searchDir, options.pattern || '**/*.css');
+  const filesPattern = searchDir.replace(/\\/g, '/') + '/' + (options.pattern || '**/*.css');
 
   const creator = new DtsCreator({
     rootDir: process.cwd(),
@@ -78,7 +78,7 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
   } else {
     console.log('Watch ' + filesPattern + '...');
 
-    const watcher = chokidar.watch([filesPattern.replace(/\\/g, '/')]);
+    const watcher = chokidar.watch([filesPattern]);
     watcher.on('add', writeFile);
     watcher.on('change', writeFile);
     watcher.on('unlink', deleteFile);
