@@ -68,13 +68,14 @@ export class DtsContent {
 
     if (this.namedExports) {
       return (
-        ['export const __esModule: true;', ...this.resultList.map(line => 'export ' + line), ''].join(os.EOL) + this.EOL
+        ['export const __esModule: true;', ...this.resultList.map(line => 'export ' + line), ''].join(this.EOL) +
+        this.EOL
       );
     }
 
     return (
       ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export = styles;', ''].join(
-        os.EOL,
+        this.EOL,
       ) + this.EOL
     );
   }
