@@ -1,5 +1,9 @@
+import fs from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert';
+
+import isThere from 'is-there';
+import { rimraf } from 'rimraf';
 
 import { DtsCreator } from './dts-creator';
 
@@ -189,6 +193,10 @@ export = styles;
   });
 
   describe('#writeFile', () => {
+    beforeEach(async () => {
+      await rimraf(path.normalize('fixtures/testStyle.css.d.ts'));
+    });
+
     it('accepts a postprocessor sync function', async () => {
       const content = await new DtsCreator().create(path.normalize('fixtures/testStyle.css'));
       await content.writeFile(formatted => `// this banner was added to the .d.ts file automatically.\n${formatted}`);
@@ -201,15 +209,26 @@ export = styles;
       );
     });
 
-    it('writes a file', async () => {
+    it('writes a .d.ts file', async () => {
       const content = await new DtsCreator().create(path.normalize('fixtures/testStyle.css'));
       await content.writeFile();
+      expect(isThere(path.normalize('fixtures/testStyle.css.d.ts'))).toBeTruthy();
     });
   });
+
   describe('#deleteFile', () => {
-    it('delete a file', async () => {
+    beforeEach(async () => {
+      await fs.writeFile(path.normalize('fixtures/none.css.d.ts'), '', 'utf8');
+    });
+
+    it('delete a .d.ts file', async () => {
       const content = await new DtsCreator().create(path.normalize('fixtures/none.css'), undefined, false, true);
       await content.deleteFile();
+      expect(isThere(path.normalize('fixtures/none.css.d.ts'))).toBeFalsy();
+    });
+
+    afterAll(async () => {
+      await rimraf(path.normalize('fixtures/none.css.d.ts'));
     });
   });
 });

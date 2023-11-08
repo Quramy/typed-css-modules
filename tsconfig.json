@@ -8,10 +8,12 @@
     "noImplicitAny": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "rootDir": "src",
     "outDir": "lib",
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "fixtures", "lib"]
