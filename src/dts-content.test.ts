@@ -204,4 +204,10 @@ export = styles;
       await content.writeFile();
     });
   });
+  describe('#deleteFile', () => {
+    it('delete a file', async () => {
+      const content = await new DtsCreator().create('fixtures/none.css', undefined, false, true);
+      await content.deleteFile();
+    });
+  });
 });

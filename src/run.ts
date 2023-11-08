@@ -51,6 +51,18 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
     }
   };
 
+  const deleteFile = async (f: string): Promise<void> => {
+    try {
+      const content: DtsContent = await creator.create(f, undefined, !!options.watch, true);
+
+      await content.deleteFile();
+
+      console.log('Delete ' + chalk.green(content.outputFilePath));
+    } catch (error) {
+      console.error(chalk.red('[Error] ' + error));
+    }
+  };
+
   if (options.listDifferent) {
     const files = await glob(filesPattern);
     const hasErrors = (await Promise.all(files.map(checkFile))).includes(false);
@@ -69,6 +81,7 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
     const watcher = chokidar.watch([filesPattern.replace(/\\/g, '/')]);
     watcher.on('add', writeFile);
     watcher.on('change', writeFile);
+    watcher.on('unlink', deleteFile);
     await waitForever();
   }
 }

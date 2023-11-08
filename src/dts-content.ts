@@ -9,6 +9,7 @@ import chalk from 'chalk';
 
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
+const unlinkFile = util.promisify(fs.unlink);
 
 export type CamelCaseOption = boolean | 'dashes' | undefined;
 
@@ -138,6 +139,12 @@ export class DtsContent {
 
     if (isDirty) {
       await writeFile(this.outputFilePath, finalOutput, 'utf8');
+    }
+  }
+
+  public async deleteFile() {
+    if (isThere(this.outputFilePath)) {
+      await unlinkFile(this.outputFilePath);
     }
   }
 
