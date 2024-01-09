@@ -39,6 +39,13 @@ describe('DtsContent', () => {
       const content = await new DtsCreator({ dropExtension: true }).create(path.normalize('fixtures/testStyle.css'));
       assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('fixtures/testStyle.d.ts'));
     });
+
+    it('can comply with TypeScript allowArbitraryExtensions when asked', async () => {
+      const content = await new DtsCreator({ allowArbitraryExtensions: true }).create(
+        path.normalize('fixtures/testStyle.css'),
+      );
+      assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('fixtures/testStyle.d.css.ts'));
+    });
   });
 
   describe('#relativeOutputFilePath', () => {

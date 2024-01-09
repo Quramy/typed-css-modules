@@ -52,4 +52,15 @@ describe(DtsCreator, () => {
       assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('dist/testStyle.css.d.ts'));
     });
   });
+
+  describe('#allow arbitrary extensions', () => {
+    it('can be set allowArbitraryExtensions', async () => {
+      const content = await new DtsCreator({
+        searchDir: 'fixtures',
+        outDir: 'dist',
+        allowArbitraryExtensions: true,
+      }).create(path.normalize('fixtures/testStyle.css'));
+      assert.equal(path.relative(process.cwd(), content.outputFilePath), path.normalize('dist/testStyle.d.css.ts'));
+    });
+  });
 });
