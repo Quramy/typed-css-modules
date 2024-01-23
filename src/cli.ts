@@ -42,6 +42,11 @@ const yarg = yargs(hideBin(process.argv))
       desc: 'Use named exports as opposed to default exports to enable tree shaking.',
       alias: 'namedExports',
     },
+    a: {
+      type: 'boolean',
+      desc: 'Use the ".d.css.ts" extension to be compatible with the equivalent TypeScript option',
+      alias: 'allowArbitraryExtensions',
+    },
     d: {
       type: 'boolean',
       desc: "'Drop the input files extension'",

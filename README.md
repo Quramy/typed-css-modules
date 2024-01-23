@@ -149,6 +149,12 @@ export = styles;
 export const someComponent: string;
 ```
 
+#### arbitrary file extensions
+
+With `-a` or `--allowArbitraryExtensions`, output filenames will be compatible with the "arbitrary file extensions" feature that was introduce in TypeScript 5.0. See [the docs](https://www.typescriptlang.org/tsconfig#allowArbitraryExtensions) for more info.
+
+In essence, the `*.css.d.ts` extension now becomes `*.d.css.ts` so that you can import CSS modules in projects using ESM module resolution.
+
 ## API
 
 ```sh
@@ -178,6 +184,7 @@ You can set the following options:
 - `option.outDir`: Output directory(default: `option.searchDir`).
 - `option.camelCase`: Camelize CSS class tokens.
 - `option.namedExports`: Use named exports as opposed to default exports to enable tree shaking. Requires `import * as style from './file.module.css';` (default: `false`)
+- `option.allowArbitraryExtensions`: Output filenames that will be compatible with the "arbitrary file extensions" TypeScript feature
 - `option.EOL`: EOL (end of line) for the generated `d.ts` files. Possible values `'\n'` or `'\r\n'`(default: `os.EOL`).
 
 #### `create(filepath, contents) => Promise(dtsContent)`

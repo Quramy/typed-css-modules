@@ -16,6 +16,7 @@ interface DtsContentOptions {
   rInputPath: string;
   rawTokenList: string[];
   namedExports: boolean;
+  allowArbitraryExtensions: boolean;
   camelCase: CamelCaseOption;
   EOL: string;
 }
@@ -28,6 +29,7 @@ export class DtsContent {
   private rInputPath: string;
   private rawTokenList: string[];
   private namedExports: boolean;
+  private allowArbitraryExtensions: boolean;
   private camelCase: CamelCaseOption;
   private resultList: string[];
   private EOL: string;
@@ -40,6 +42,7 @@ export class DtsContent {
     this.rInputPath = options.rInputPath;
     this.rawTokenList = options.rawTokenList;
     this.namedExports = options.namedExports;
+    this.allowArbitraryExtensions = options.allowArbitraryExtensions;
     this.camelCase = options.camelCase;
     this.EOL = options.EOL;
 
@@ -177,8 +180,14 @@ export class DtsContent {
   }
 
   private get outputFileName(): string {
-    const outputFileName = this.dropExtension ? removeExtension(this.rInputPath) : this.rInputPath;
-    return outputFileName + '.d.ts';
+    // Original extension must be dropped when using the allowArbitraryExtensions option
+    const outputFileName =
+      this.dropExtension || this.allowArbitraryExtensions ? removeExtension(this.rInputPath) : this.rInputPath;
+    /**
+     * Handles TypeScript 5.0 addition of arbitrary file extension patterns for ESM compatibility
+     * https://www.typescriptlang.org/tsconfig#allowArbitraryExtensions
+     */
+    return outputFileName + (this.allowArbitraryExtensions ? '.d.css.ts' : '.d.ts');
   }
 }
 
