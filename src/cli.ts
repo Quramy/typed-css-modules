@@ -89,6 +89,7 @@ async function main(): Promise<void> {
     camelCase: argv.c,
     namedExports: argv.e,
     dropExtension: argv.d,
+    allowArbitraryExtensions: argv.a,
     silent: argv.s,
     listDifferent: argv.l,
   });
