@@ -79,7 +79,7 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
   } else {
     console.log('Watch ' + filesPattern + '...');
 
-    const watcher = chokidar.watch([filesPattern]);
+    const watcher = chokidar.watch(await glob(filesPattern));
     watcher.on('add', writeFile);
     watcher.on('change', writeFile);
     watcher.on('unlink', deleteFile);
