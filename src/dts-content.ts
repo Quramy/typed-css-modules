@@ -18,6 +18,7 @@ interface DtsContentOptions {
   namedExports: boolean;
   allowArbitraryExtensions: boolean;
   camelCase: CamelCaseOption;
+  singleQuote?: boolean;
   EOL: string;
 }
 
@@ -31,6 +32,7 @@ export class DtsContent {
   private namedExports: boolean;
   private allowArbitraryExtensions: boolean;
   private camelCase: CamelCaseOption;
+  private quote: '"' | "'";
   private resultList: string[];
   private EOL: string;
 
@@ -44,6 +46,7 @@ export class DtsContent {
     this.namedExports = options.namedExports;
     this.allowArbitraryExtensions = options.allowArbitraryExtensions;
     this.camelCase = options.camelCase;
+    this.quote = options.singleQuote ? "'" : '"';
     this.EOL = options.EOL;
 
     // when using named exports, camelCase must be enabled by default
@@ -71,11 +74,12 @@ export class DtsContent {
       );
     }
 
-    return (
+    const data =
       ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export = styles;', ''].join(
         this.EOL,
-      ) + this.EOL
-    );
+      ) + this.EOL;
+
+    return data;
   }
 
   public get tokens(): string[] {
@@ -152,7 +156,7 @@ export class DtsContent {
 
     const result = this.rawTokenList
       .map(k => convertKey(k))
-      .map(k => (!this.namedExports ? 'readonly "' + k + '": string;' : 'const ' + k + ': string;'))
+      .map(k => (!this.namedExports ? `readonly ${this.quote}${k}${this.quote}: string;` : 'const ' + k + ': string;'))
       .sort();
 
     return result;
