@@ -72,7 +72,7 @@ export class DtsContent {
     }
 
     return (
-      ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export = styles;', ''].join(
+      ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export default styles;', ''].join(
         this.EOL,
       ) + this.EOL
     );
