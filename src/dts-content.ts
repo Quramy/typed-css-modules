@@ -19,6 +19,7 @@ interface DtsContentOptions {
   allowArbitraryExtensions: boolean;
   camelCase: CamelCaseOption;
   EOL: string;
+  esModule: boolean;
 }
 
 export class DtsContent {
@@ -33,6 +34,7 @@ export class DtsContent {
   private camelCase: CamelCaseOption;
   private resultList: string[];
   private EOL: string;
+  private esModule: boolean;
 
   constructor(options: DtsContentOptions) {
     this.dropExtension = options.dropExtension;
@@ -45,6 +47,7 @@ export class DtsContent {
     this.allowArbitraryExtensions = options.allowArbitraryExtensions;
     this.camelCase = options.camelCase;
     this.EOL = options.EOL;
+    this.esModule = options.esModule;
 
     // when using named exports, camelCase must be enabled by default
     // (see https://webpack.js.org/loaders/css-loader/#namedexport)
@@ -72,9 +75,13 @@ export class DtsContent {
     }
 
     return (
-      ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export default styles;', ''].join(
-        this.EOL,
-      ) + this.EOL
+      [
+        'declare const styles: {',
+        ...this.resultList.map(line => '  ' + line),
+        '};',
+        this.esModule ? 'export default styles;' : 'export = styles;',
+        '',
+      ].join(this.EOL) + this.EOL
     );
   }
 

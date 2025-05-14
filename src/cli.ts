@@ -33,7 +33,7 @@ const yarg = yargs(hideBin(process.argv))
       alias: 'watch',
     },
     c: {
-      desc: "Watch input directory's css files or pattern",
+      desc: 'Convert CSS class tokens to camelcase',
       type: 'boolean',
       alias: 'camelCase',
     },
@@ -56,6 +56,11 @@ const yarg = yargs(hideBin(process.argv))
       type: 'boolean',
       alias: 'silent',
       desc: 'Silent output. Do not show "files written" messages',
+    },
+    m: {
+      type: 'boolean',
+      alias: 'esModule',
+      desc: 'sets target module style to ESM',
     },
   })
   .alias('h', 'help')
@@ -92,5 +97,6 @@ async function main(): Promise<void> {
     allowArbitraryExtensions: argv.a,
     silent: argv.s,
     listDifferent: argv.l,
+    esModule: argv.m,
   });
 }
