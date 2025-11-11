@@ -37,7 +37,7 @@
     "camelcase": "^6.0.0",
     "chalk": "^4.0.0",
     "chokidar": "^3.4.0",
-    "glob": "^10.3.10",
+    "glob": "^11.0.0",
     "icss-replace-symbols": "^1.1.0",
     "is-there": "^4.4.2",
     "mkdirp": "^3.0.0",
