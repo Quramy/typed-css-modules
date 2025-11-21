@@ -155,6 +155,22 @@ export = styles;
         );
       });
     });
+
+    describe('#esModule option', () => {
+      it('esModule = true: returns esm style default export', async () => {
+        const content = await new DtsCreator({ esModule: true }).create('fixtures/testStyle.css');
+        assert.equal(
+          content.formatted,
+          `\
+declare const styles: {
+  readonly "myClass": string;
+};
+export default styles;
+
+`,
+        );
+      });
+    });
   });
 
   describe('#checkFile', () => {
