@@ -57,6 +57,11 @@ const yarg = yargs(hideBin(process.argv))
       alias: 'silent',
       desc: 'Silent output. Do not show "files written" messages',
     },
+    f: {
+      desc: "Follow symlinks",
+      type: 'boolean',
+      alias: 'followSymlinks',
+    },
   })
   .alias('h', 'help')
   .help('h')
@@ -92,5 +97,6 @@ async function main(): Promise<void> {
     allowArbitraryExtensions: argv.a,
     silent: argv.s,
     listDifferent: argv.l,
+    followSymlinks: argv.f,
   });
 }
