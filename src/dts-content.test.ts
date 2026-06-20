@@ -73,10 +73,9 @@ describe('DtsContent', () => {
         content.formatted,
         `\
 declare const styles: {
-  readonly "myClass": string;
+  readonly myClass: string;
 };
 export = styles;
-
 `,
       );
     });
@@ -88,7 +87,6 @@ export = styles;
         `\
 export const __esModule: true;
 export const myClass: string;
-
 `,
       );
     });
@@ -100,7 +98,6 @@ export const myClass: string;
         `\
 export const __esModule: true;
 export const myClass: string;
-
 `,
       );
     });
@@ -117,10 +114,9 @@ export const myClass: string;
           content.formatted,
           `\
 declare const styles: {
-  readonly "myClass": string;
+  readonly myClass: string;
 };
 export = styles;
-
 `,
         );
       });
@@ -131,10 +127,9 @@ export = styles;
           content.formatted,
           `\
 declare const styles: {
-  readonly "myClass": string;
+  readonly myClass: string;
 };
 export = styles;
-
 `,
         );
       });
@@ -147,10 +142,9 @@ export = styles;
           content.formatted,
           `\
 declare const styles: {
-  readonly "MyClass": string;
+  readonly MyClass: string;
 };
 export = styles;
-
 `,
         );
       });

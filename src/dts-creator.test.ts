@@ -8,7 +8,7 @@ describe(DtsCreator, () => {
     it('returns DtsContent instance simple css', async () => {
       const content = await new DtsCreator().create('fixtures/testStyle.css');
       assert.equal(content.contents.length, 1);
-      assert.equal(content.contents[0], 'readonly "myClass": string;');
+      assert.equal(content.contents[0], 'readonly myClass: string;');
     });
 
     it('rejects an error with invalid CSS', async () => {
@@ -20,27 +20,27 @@ describe(DtsCreator, () => {
     it('returns DtsContent instance from composing css', async () => {
       const content = await new DtsCreator().create('fixtures/composer.css');
       assert.equal(content.contents.length, 1);
-      assert.equal(content.contents[0], 'readonly "root": string;');
+      assert.equal(content.contents[0], 'readonly root: string;');
     });
 
     it('returns DtsContent instance from composing css whose has invalid import/composes', async () => {
       const content = await new DtsCreator().create('fixtures/invalidComposer.scss');
       assert.equal(content.contents.length, 1);
-      assert.equal(content.contents[0], 'readonly "myClass": string;');
+      assert.equal(content.contents[0], 'readonly myClass: string;');
     });
 
     it('returns DtsContent instance from the pair of path and contents', async () => {
       const content = await new DtsCreator().create('fixtures/somePath', `.myClass { color: red }`);
       assert.equal(content.contents.length, 1);
-      assert.equal(content.contents[0], 'readonly "myClass": string;');
+      assert.equal(content.contents[0], 'readonly myClass: string;');
     });
 
     it('returns DtsContent instance combined css', async () => {
       const content = await new DtsCreator().create('fixtures/combined/combined.css');
       assert.equal(content.contents.length, 3);
-      assert.equal(content.contents[0], 'readonly "block": string;');
-      assert.equal(content.contents[1], 'readonly "box": string;');
-      assert.equal(content.contents[2], 'readonly "myClass": string;');
+      assert.equal(content.contents[0], 'readonly block: string;');
+      assert.equal(content.contents[1], 'readonly box: string;');
+      assert.equal(content.contents[2], 'readonly myClass: string;');
     });
   });
 

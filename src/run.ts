@@ -9,6 +9,7 @@ interface RunOptions {
   outDir?: string;
   watch?: boolean;
   camelCase?: boolean;
+  singleQuote?: boolean;
   namedExports?: boolean;
   allowArbitraryExtensions?: boolean;
   dropExtension?: boolean;
@@ -24,6 +25,7 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
     searchDir,
     outDir: options.outDir,
     camelCase: options.camelCase,
+    singleQuote: options.singleQuote,
     namedExports: options.namedExports,
     allowArbitraryExtensions: options.allowArbitraryExtensions,
     dropExtension: options.dropExtension,
