@@ -155,6 +155,17 @@ With `-a` or `--allowArbitraryExtensions`, output filenames will be compatible w
 
 In essence, the `*.css.d.ts` extension now becomes `*.d.css.ts` so that you can import CSS modules in projects using ESM module resolution.
 
+#### ESM style exports
+
+With `-m` or `--esModule`, the default exports will follow the ESM style of exports/imports.
+
+```typescript
+declare const styles: {
+  readonly SomeComponent: string;
+};
+export default styles;
+```
+
 ## API
 
 ```sh

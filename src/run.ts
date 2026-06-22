@@ -14,6 +14,7 @@ interface RunOptions {
   dropExtension?: boolean;
   silent?: boolean;
   listDifferent?: boolean;
+  esModule?: boolean;
 }
 
 export async function run(searchDir: string, options: RunOptions = {}): Promise<void> {

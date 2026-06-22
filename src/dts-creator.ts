@@ -17,6 +17,7 @@ interface DtsCreatorOptions {
   dropExtension?: boolean;
   EOL?: string;
   loaderPlugins?: Plugin[];
+  esModule?: boolean;
 }
 
 export class DtsCreator {
@@ -30,6 +31,7 @@ export class DtsCreator {
   private allowArbitraryExtensions: boolean;
   private dropExtension: boolean;
   private EOL: string;
+  private esModule: boolean;
 
   constructor(options?: DtsCreatorOptions) {
     if (!options) options = {};
@@ -43,6 +45,7 @@ export class DtsCreator {
     this.allowArbitraryExtensions = !!options.allowArbitraryExtensions;
     this.dropExtension = !!options.dropExtension;
     this.EOL = options.EOL || os.EOL;
+    this.esModule = !!options.esModule;
   }
 
   public async create(
@@ -80,6 +83,7 @@ export class DtsCreator {
       allowArbitraryExtensions: this.allowArbitraryExtensions,
       camelCase: this.camelCase,
       EOL: this.EOL,
+      esModule: this.esModule,
     });
 
     return content;
