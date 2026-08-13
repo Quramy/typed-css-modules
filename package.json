@@ -58,6 +58,6 @@
     "pretty-quick": "4.2.2",
     "rimraf": "6.1.3",
     "ts-jest": "29.4.11",
-    "typescript": "5.5.4"
+    "typescript": "5.9.3"
   }
 }
