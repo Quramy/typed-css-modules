@@ -18,6 +18,7 @@ interface DtsContentOptions {
   namedExports: boolean;
   allowArbitraryExtensions: boolean;
   camelCase: CamelCaseOption;
+  singleQuote?: boolean;
   EOL: string;
 }
 
@@ -31,6 +32,7 @@ export class DtsContent {
   private namedExports: boolean;
   private allowArbitraryExtensions: boolean;
   private camelCase: CamelCaseOption;
+  private quote: '"' | "'";
   private resultList: string[];
   private EOL: string;
 
@@ -44,6 +46,7 @@ export class DtsContent {
     this.namedExports = options.namedExports;
     this.allowArbitraryExtensions = options.allowArbitraryExtensions;
     this.camelCase = options.camelCase;
+    this.quote = options.singleQuote ? "'" : '"';
     this.EOL = options.EOL;
 
     // when using named exports, camelCase must be enabled by default
@@ -65,17 +68,18 @@ export class DtsContent {
     if (!this.resultList || !this.resultList.length) return 'export {};';
 
     if (this.namedExports) {
-      return (
-        ['export const __esModule: true;', ...this.resultList.map(line => 'export ' + line), ''].join(this.EOL) +
-        this.EOL
-      );
+      return ['export const __esModule: true;', ...this.resultList.map(line => 'export ' + line), ''].join(this.EOL);
     }
 
-    return (
-      ['declare const styles: {', ...this.resultList.map(line => '  ' + line), '};', 'export = styles;', ''].join(
-        this.EOL,
-      ) + this.EOL
-    );
+    const data = [
+      'declare const styles: {',
+      ...this.resultList.map(line => '  ' + line),
+      '};',
+      'export = styles;',
+      '',
+    ].join(this.EOL);
+
+    return data;
   }
 
   public get tokens(): string[] {
@@ -149,10 +153,15 @@ export class DtsContent {
 
   private createResultList(): string[] {
     const convertKey = this.getConvertKeyMethod(this.camelCase);
+    const quote = this.camelCase ? '' : this.quote;
 
     const result = this.rawTokenList
       .map(k => convertKey(k))
-      .map(k => (!this.namedExports ? 'readonly "' + k + '": string;' : 'const ' + k + ': string;'))
+      .map(k => {
+        const q = k.includes('-') ? quote : '';
+
+        return !this.namedExports ? `readonly ${q}${k}${q}: string;` : 'const ' + k + ': string;';
+      })
       .sort();
 
     return result;
