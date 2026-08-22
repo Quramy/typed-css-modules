@@ -1,6 +1,8 @@
 import chalk from 'chalk';
 import chokidar from 'chokidar';
 import { glob } from 'glob';
+import { minimatch } from 'minimatch';
+
 import { DtsCreator } from './dts-creator';
 import { DtsContent } from './dts-content';
 
@@ -41,6 +43,21 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
 
   const writeFile = async (f: string): Promise<void> => {
     try {
+      // If we're watching recheck the file against the pattern since
+      // chokidar does not filter files inside symlinks and we don't
+      // know (without checking every parent) if the file is inside a
+      // symlink.
+      //
+      // Chokidar issue:
+      //
+      //   https://github.com/paulmillr/chokidar/issues/967
+      //
+      // When that's fixed this can be removed (from deleteFile too),
+      // but the issue is 2 years old already (reported 2020).
+      if (!!options.watch && !minimatch(f, filesPattern)) {
+        return;
+      }
+
       const content: DtsContent = await creator.create(f, undefined, !!options.watch);
       await content.writeFile();
 
@@ -54,6 +71,11 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
 
   const deleteFile = async (f: string): Promise<void> => {
     try {
+      // Recheck patterh, see writeFile for explanation.
+      if (!!options.watch && !minimatch(f, filesPattern)) {
+        return;
+      }
+
       const content: DtsContent = await creator.create(f, undefined, !!options.watch, true);
 
       await content.deleteFile();
