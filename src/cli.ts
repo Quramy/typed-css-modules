@@ -33,7 +33,7 @@ const yarg = yargs(hideBin(process.argv))
       alias: 'watch',
     },
     c: {
-      desc: "Watch input directory's css files or pattern",
+      desc: "Camelize CSS class tokens",
       type: 'boolean',
       alias: 'camelCase',
     },
