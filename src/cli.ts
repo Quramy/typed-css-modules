@@ -37,6 +37,11 @@ const yarg = yargs(hideBin(process.argv))
       type: 'boolean',
       alias: 'camelCase',
     },
+    sq: {
+      desc: 'Use single quotes for writing the keys when they have a dash',
+      type: 'boolean',
+      alias: 'singleQuote',
+    },
     e: {
       type: 'boolean',
       desc: 'Use named exports as opposed to default exports to enable tree shaking.',
@@ -87,6 +92,7 @@ async function main(): Promise<void> {
     outDir: argv.o,
     watch: argv.w,
     camelCase: argv.c,
+    singleQuote: argv.sq,
     namedExports: argv.e,
     dropExtension: argv.d,
     allowArbitraryExtensions: argv.a,

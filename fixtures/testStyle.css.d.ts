@@ -1,5 +1,4 @@
 declare const styles: {
-  readonly "myClass": string;
+  readonly myClass: string;
 };
 export = styles;
-

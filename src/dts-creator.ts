@@ -12,6 +12,7 @@ interface DtsCreatorOptions {
   searchDir?: string;
   outDir?: string;
   camelCase?: CamelCaseOption;
+  singleQuote?: boolean;
   namedExports?: boolean;
   allowArbitraryExtensions?: boolean;
   dropExtension?: boolean;
@@ -26,6 +27,7 @@ export class DtsCreator {
   private loader: FileSystemLoader;
   private inputDirectory: string;
   private camelCase: CamelCaseOption;
+  private singleQuote?: boolean;
   private namedExports: boolean;
   private allowArbitraryExtensions: boolean;
   private dropExtension: boolean;
@@ -38,6 +40,7 @@ export class DtsCreator {
     this.outDir = options.outDir || this.searchDir;
     this.loader = new FileSystemLoader(this.rootDir, options.loaderPlugins);
     this.inputDirectory = path.join(this.rootDir, this.searchDir);
+    this.singleQuote = options.singleQuote;
     this.camelCase = options.camelCase;
     this.namedExports = !!options.namedExports;
     this.allowArbitraryExtensions = !!options.allowArbitraryExtensions;
@@ -79,6 +82,7 @@ export class DtsCreator {
       namedExports: this.namedExports,
       allowArbitraryExtensions: this.allowArbitraryExtensions,
       camelCase: this.camelCase,
+      singleQuote: this.singleQuote,
       EOL: this.EOL,
     });
 
