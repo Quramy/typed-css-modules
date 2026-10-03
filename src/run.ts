@@ -14,6 +14,7 @@ interface RunOptions {
   dropExtension?: boolean;
   silent?: boolean;
   listDifferent?: boolean;
+  followSymlinks?: boolean;
 }
 
 export async function run(searchDir: string, options: RunOptions = {}): Promise<void> {
@@ -74,12 +75,16 @@ export async function run(searchDir: string, options: RunOptions = {}): Promise<
   }
 
   if (!options.watch) {
-    const files = await glob(filesPattern);
+    const files = await glob(filesPattern, {
+      follow: options.followSymlinks,
+    });
     await Promise.all(files.map(writeFile));
   } else {
     console.log('Watch ' + filesPattern + '...');
 
-    const watcher = chokidar.watch([filesPattern]);
+    const watcher = chokidar.watch([filesPattern], {
+      followSymlinks: options.followSymlinks,
+    });
     watcher.on('add', writeFile);
     watcher.on('change', writeFile);
     watcher.on('unlink', deleteFile);
