@@ -46,7 +46,7 @@
     "postcss-modules-local-by-default": "^4.0.0",
     "postcss-modules-scope": "^3.0.0",
     "postcss-modules-values": "^4.0.0",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@types/jest": "29.5.14",
